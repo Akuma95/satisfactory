@@ -55,7 +55,7 @@
       <v-row>
         <v-col cols="12" md="4">
           <h2>Nodes</h2>
-          <v-row v-for="node in factory.node">
+          <v-row v-for="node in factory.node" :key="node.name.value+node.purity.value">
             <v-col cols="3"></v-col>
             <v-col cols="12" md="4">{{node.name.value}} ({{node.purity.value}})</v-col>
             <v-col cols="12" md="2">{{node.countNodes}}</v-col>
@@ -66,7 +66,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <h2>Input</h2>
-          <v-row v-for="input in factory.input">
+          <v-row v-for="input in factory.input" :key="input.resource.value">
             <v-col cols="3"></v-col>
             <v-col cols="12" md="4">{{input.resource.value}}</v-col>
             <v-col cols="12" md="2">{{input.countRessource}}</v-col>
@@ -77,7 +77,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <h2>Output</h2>
-          <v-row v-for="output in factory.outout">
+          <v-row v-for="output in factory.output" :key="output.resource.value">
             <v-col cols="3"></v-col>
             <v-col cols="12" md="4">{{output.resource.value}}</v-col>
             <v-col cols="12" md="2">{{output.countRessource}}</v-col>
@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import fillDuration from '@/saveFile/fillDurationPlatform.js';
 import {db} from "@/firebase";
 
 export default {
