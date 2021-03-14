@@ -8,6 +8,12 @@
             v-model="timetable.kind"
             label="Beförderungsart"
             @change="resetTraffic"
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-combobox>
       </v-col>
       <v-col cols="12" md="4">
@@ -15,6 +21,12 @@
             :items="timetableItems"
             v-model="timetable.name"
             label="Name des Zuges*"
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-combobox>
         <p class="satis-error" v-if="errorSave">Der Name ist leer oder bereits vergeben.</p>
       </v-col>
@@ -69,6 +81,12 @@
             :items="trafficItems"
             v-model="timetable.station[items-1]"
             :label="timetable.kind.value === 'train' ? 'Bahnhof' : 'LKW-Station'"
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-select>
         <v-divider></v-divider>
       </v-col>
@@ -84,30 +102,19 @@
 
 <script>
 import {db} from "@/firebase";
-import firebase from "firebase";
 
 export default {
   name: "AddPlanView",
-  props: [
-    'localAllTraffic',
-    'loaclAllTimetable'
-  ],
   watch: {
     allTraffic() {
-      this.setTraffic();
+      this.setCombobox(this.allTraffic, this.trafficItems);
     },
     allTimetable() {
-      this.setTimetable();
+      this.setCombobox(this.allTimetable, this.timetableItems);
     },
-  },
-  firestore: {
-    allTraffic: db.collection('traffic'),
-    allTimetable: db.collection('timetable'),
   },
   data() {
     return {
-      allTraffic: this.localAllTraffic,
-      allTimetable: this.loaclAllTimetable,
       errorSave: false,
       trafficItems: [],
       timetableItems: [],
@@ -138,21 +145,19 @@ export default {
       ],
     };
   },
-  methods: {
-    writeLog(col, doc) {
-      let timestamp = Date.now();
-      let date = new Date(timestamp);
-      let humanDateShort = date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-
-      let log = {
-        who: localStorage.getItem('id') !== '' ? localStorage.getItem('id') : Math.random().toString(36).substr(2, 9),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        kind: 'Add Data',
-        collection: col,
-        document: doc,
-      };
-      db.collection('log').doc(humanDateShort+'||'+doc).set(log);
+  computed: {
+    allTraffic() {
+      return this.$store.getters.getAllTraffic;
     },
+    allTimetable() {
+      return this.$store.getters.getAllTimetable;
+    },
+  },
+  mounted() {
+    this.setCombobox(this.allTimetable, this.timetableItems);
+    this.setCombobox(this.allTraffic, this.trafficItems);
+  },
+  methods: {
     writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let timetable = {
@@ -167,7 +172,6 @@ export default {
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
       pathBasic.set(timetable).then(() => {
-        this.writeLog('timetable', timetable.name)
         this.timetable.name = '';
         this.timetable.duration = '';
         this.timetable.value = 1;
@@ -208,24 +212,15 @@ export default {
         this.timetable.station.pop();
       }
     },
-    setTraffic() {
-      this.allTraffic.forEach(obj => {
+    setCombobox(res, tar) {
+      res.forEach(obj => {
         let input = {
           text: obj.name,
           value: obj.name,
         };
-        this.trafficItems.push(input);
+        tar.push(input);
       });
     },
-    setTimetable() {
-      this.allTimetable.forEach(obj => {
-        let input = {
-          text: obj.id,
-          value: obj.id,
-        };
-        this.timetableItems.push(input);
-      });
-    }
   },
 };
 </script>

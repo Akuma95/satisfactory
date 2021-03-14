@@ -15,11 +15,11 @@
             attach
             @change="changeSelctedRessource"
             :menu-props="{
-                bottom: true,
-                offsetY: true,
-                offsetOverflow: true,
-                rounded: true,
-              }"
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-combobox>
       </v-col>
       <v-col cols="3">
@@ -44,17 +44,10 @@
 
 <script>
 import {db} from '@/firebase'
-import firebase from "firebase";
 
 export default {
   name: "RessourceView",
-  props: [
-    'localAllRessources',
-  ],
   watch: {
-    localAllRessources() {
-      this.setCombobox();
-    },
     selectedRessource() {
       this.changeSelctedRessource();
     }
@@ -63,43 +56,30 @@ export default {
     return {
       disableBtn: false,
       disableBtnAll: true,
-      allRessources: this.localAllRessources,
       selectedRessource: {},
       items: []
     };
   },
+  computed: {
+    allRessources() {
+      return this.$store.getters.getAllRessources;
+    }
+  },
+  mounted() {
+    this.setCombobox();
+  },
   methods: {
-    writeLog(col, doc) {
-      let timestamp = Date.now();
-      let date = new Date(timestamp);
-      let humanDateShort = date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-
-      let log = {
-        who: localStorage.getItem('id') !== '' ? localStorage.getItem('id') : Math.random().toString(36).substr(2, 9),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        kind: 'Delete Data',
-        collection: col,
-        document: doc,
-      };
-      db.collection('log').doc(humanDateShort+'||'+doc).set(log);
-    },
     deleteRessource() {
       let path = db.collection('ressources').doc(this.selectedRessource.value)
       path = this.selectedRessource.warning ?
           path :
           path.collection('alternative').doc(this.selectedRessource.value);
-
       path.delete();
-      this.selectedRessource.warning ?
-          this.writeLog('ressources', this.selectedRessource.value) :
-          this.writeLog('ressources|'+this.selectedRessource.value+'|alternative', this.selectedRessource.value)
-
-
       this.setCombobox();
     },
 
     changeSelctedRessource() {
-      this.disableBtn = this.selectedRessource.warning ? false : true;
+      this.disableBtn = !this.selectedRessource.warning;
     },
 
     setCombobox() {
@@ -121,8 +101,8 @@ export default {
               });
             })
         let input = {
-          text: obj.id,
-          value: obj.id,
+          text: obj.name,
+          value: obj.name,
           warning: true,
           color: 'red',
           hint: 'Dies ist ein Original Rezept',
@@ -132,9 +112,6 @@ export default {
       });
     },
   },
-  mounted() {
-    this.setCombobox();
-  }
 };
 </script>
 

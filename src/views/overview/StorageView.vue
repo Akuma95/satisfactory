@@ -17,17 +17,8 @@ import {db} from "@/firebase";
 
 export default {
   name: "ShowNodesView",
-  props: [
-    'localAllRessources',
-  ],
-  watch: {
-    allRessources() {
-      this.setTable();
-    }
-  },
   data() {
     return {
-      allRessources: this.localAllRessources,
       headers: [
         {
           text: 'Ressourcen',
@@ -41,6 +32,14 @@ export default {
       ],
       storage: [],
     };
+  },
+  computed: {
+    allRessources() {
+      return this.$store.getters.getAllRessources;
+    }
+  },
+  mounted() {
+    this.setTable();
   },
   methods: {
     async getNeeded(name) {

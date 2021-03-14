@@ -17,18 +17,13 @@ import {db} from '@/firebase'
 
 export default {
   name: "ShowNodesView",
-  props: [
-    'localAllNodes',
-  ],
   watch: {
     localAllNodes() {
-      //this.allNodes = this.localAllNodes;
       this.setCombobox()
     }
   },
   data() {
     return {
-      allNodes: this.localAllNodes,
       nodes: [],
       node: {
         name: '',
@@ -48,6 +43,14 @@ export default {
         { text: 'Unrein', value: 'impure' },
       ],
     };
+  },
+  computed: {
+    allNodes() {
+      return this.$store.getters.getAllNodes;
+    }
+  },
+  mounted() {
+    this.setCombobox()
   },
   methods: {
     save() {
@@ -74,9 +77,6 @@ export default {
       });
     }
   },
-  mounted() {
-    this.setCombobox();
-  }
 };
 </script>
 

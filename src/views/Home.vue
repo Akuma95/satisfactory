@@ -4,10 +4,10 @@
     <br>
     <v-row>
       <v-col cols="12" md="7">
-        <all-nodes-view :local-all-nodes="allNodes"></all-nodes-view>
+        <all-nodes-view></all-nodes-view>
       </v-col>
       <v-col cols="12" md="5">
-        <storage-view :local-all-ressources="allRessources"></storage-view>
+        <storage-view></storage-view>
       </v-col>
     </v-row>
     <br>
@@ -25,18 +25,6 @@ export default {
   components: {
     AllNodesView,
     StorageView,
-  },
-  data() {
-    return {
-      allNodes: [],
-      allRessources: [],
-    };
-  },
-  firestore: {
-    allNodes: db.collection('nodes'),
-    allRessources: db.collection('ressources')
-  },
-  methods: {
   },
 }
 </script>

@@ -19,26 +19,11 @@
 
 <script>
 import AddFactoryView from "@/views/factory/AddFactoryView";
-import {db} from "@/firebase";
 
 export default {
   name: "FactoryView",
   components: {
     AddFactoryView,
-  },
-  data() {
-    return {
-      allNodes: [],
-      allRessources: [],
-    };
-  },
-  firestore: {
-    allNodes: db.collection('nodes'),
-    allRessources: db.collection('ressources')
-  },
-  computed: {
-  },
-  methods: {
   },
 };
 </script>

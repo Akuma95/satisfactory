@@ -15,6 +15,12 @@
             :items="component"
             label="Komponente"
             placeholder="Beton"
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-combobox>
       </v-col>
     </v-row>
@@ -115,21 +121,16 @@
 
 <script>
 import {db} from "@/firebase";
-import firebase from "firebase";
 
 export default {
   name: "RessourceView",
-  props: [
-      'localAllRessources',
-  ],
   watch: {
-    localAllRessources() {
+    allRessources() {
       this.setCombobox();
     }
   },
   data() {
     return {
-      allRessources: this.localAllRessources,
       ressource: {
         id: '',
         name: '',
@@ -150,21 +151,15 @@ export default {
       input4: [],
     };
   },
+  computed: {
+    allRessources() {
+      return this.$store.getters.getAllRessources;
+    }
+  },
+  mounted() {
+    this.setCombobox();
+  },
   methods: {
-    writeLog(col, doc) {
-      let timestamp = Date.now();
-      let date = new Date(timestamp);
-      let humanDateShort = date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-
-      let log = {
-        who: localStorage.getItem('id') !== '' ? localStorage.getItem('id') : Math.random().toString(36).substr(2, 9),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        kind: 'Add Data',
-        collection: col,
-        document: doc,
-      };
-      db.collection('log').doc(humanDateShort+'||'+doc).set(log);
-    },
     save() {
       //Ein Ressource Objekt für Firestore erstellen
       let ressource = {
@@ -179,7 +174,6 @@ export default {
           input4: this.ressource.production.input4.value?this.ressource.production.input4.value:''
         }
       };
-      console.log(ressource.name)
       //Den Pfad erstellen zur DB.
       //Wenn es ein Alternativ Rezept ist, wird eine Subcolection erstellt
       let path = db.collection('ressources').doc(ressource.name)
@@ -188,9 +182,6 @@ export default {
           path;
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
       path.set(ressource).then(() => {
-        this.ressource.alternative ?
-          this.writeLog('ressources|'+ressource.name+'|alternative', this.ressource.id, ressource):
-          this.writeLog('ressources', ressource.name, ressource);
         this.ressource.id = '';
         this.ressource.name = '';
         this.ressource.alternative = false;
@@ -219,9 +210,6 @@ export default {
       });
     }
   },
-  mounted() {
-    this.setCombobox();
-  }
 };
 </script>
 

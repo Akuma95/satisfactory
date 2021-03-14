@@ -75,6 +75,12 @@
                     :items="nodeItems"
                     v-model="factory.input[input-1].node"
                     label="Welchen Knoten"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
                 ></v-combobox>
               </v-col>
               <v-col cols="12" md="3">
@@ -82,6 +88,12 @@
                     :items="purity"
                     v-model="factory.input[input-1].purity"
                     label="Reinheit"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
                 ></v-combobox>
               </v-col>
               <v-col cols="12" md="3">
@@ -97,6 +109,12 @@
                     :items="ressourceItems"
                     v-model="factory.input[input-1].resource"
                     label="Ressource"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
                 ></v-combobox>
               </v-col>
               <v-col cols="12" md="6">
@@ -112,6 +130,12 @@
                     :items="trafficItems"
                     v-model="factory.input[input-1].station"
                     label="Station"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
                 ></v-autocomplete>
               </v-col>
             </v-row>
@@ -151,6 +175,12 @@
                     :items="ressourceItems"
                     v-model="factory.output[output-1].resource"
                     label="Ressource"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
                 ></v-combobox>
               </v-col>
               <v-col cols="12" md="6">
@@ -166,6 +196,12 @@
                     :items="trafficItems"
                     v-model="factory.output[output-1].station"
                     label="Station"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
                 ></v-autocomplete>
               </v-col>
             </v-row>
@@ -185,36 +221,25 @@
 </template>
 
 <script>
-//import ressources from './../../saveFile/ressource.json'
-
 import {db} from "@/firebase";
-import firebase from "firebase";
 
 export default {
   name: "RessourceView",
   watch: {
     allRessources() {
-      this.setCombobox();
+      this.setCombobox(this.allRessources, this.ressourceItems)
     },
     allNodes() {
-      this.setNodes();
+      this.setCombobox(this.allNodes, this.nodeItems)
     },
     allTraffic() {
-      this.setTraffic();
+      this.setCombobox(this.allTraffic, this.trafficItems)
     }
-  },
-  firestore: {
-    allNodes: db.collection('nodes'),
-    allTraffic: db.collection('traffic'),
-    allRessources: db.collection('ressources')
   },
   data() {
     return {
       countInput: 1,
       countOutput: 1,
-      allNodes: [],
-      allTraffic: [],
-      allRessources: [],
       nodeItems: [],
       trafficItems: [],
       ressourceItems: [],
@@ -255,21 +280,23 @@ export default {
       },
     };
   },
-  methods: {
-    writeLog(col, doc) {
-      let timestamp = Date.now();
-      let date = new Date(timestamp);
-      let humanDateShort = date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-
-      let log = {
-        who: localStorage.getItem('id') !== '' ? localStorage.getItem('id') : Math.random().toString(36).substr(2, 9),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        kind: 'add Data',
-        collection: col,
-        document: doc,
-      };
-      db.collection('log').doc(humanDateShort+'||'+doc).set(log);
+  computed: {
+    allNodes() {
+      return this.$store.getters.getAllNodes;
     },
+    allTraffic() {
+      return this.$store.getters.getAllTraffic;
+    },
+    allRessources() {
+      return this.$store.getters.getAllRessources;
+    },
+  },
+  mounted() {
+    this.setCombobox(this.allNodes, this.nodeItems)
+    this.setCombobox(this.allTraffic, this.trafficItems)
+    this.setCombobox(this.allRessources, this.ressourceItems)
+  },
+  methods: {
     writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let fabric = {
@@ -291,7 +318,6 @@ export default {
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
       pathBasic.set(fabric).then(() => {
-        this.writeLog('factory', fabric.name);
         fabric.input.forEach(f => {
           if (f.isNode) {
             //set blocked Nodes
@@ -312,7 +338,6 @@ export default {
                   f.purity.value === 'normal' ? blocked.normalBlock+=parseInt(f.countNodes) : blocked.normalBlock = e.normalBlock
                   f.purity.value === 'impure' ? blocked.pureBlock+=parseInt(f.countNodes) : blocked.pureBlock = e.pureBlock
                   db.collection('nodes').doc(e.name).set(blocked);
-                  this.writeLog('nodes', e.name);
                 }
               })
             });
@@ -320,7 +345,6 @@ export default {
           if (f.resource.value !== '') {
             let input = {amount: f.countRessource};
             pathRessource.doc(f.resource.value).collection('need').doc(fabric.name).set(input);
-            this.writeLog('ressources', f.resource.value);
           }
 
         })
@@ -328,7 +352,6 @@ export default {
           if (e.resource !== '') {
             let output = {amount: e.countRessource};
             pathRessource.doc(e.resource.value).collection('produce').doc(fabric.name).set(output);
-            this.writeLog('ressources', e.resource.value);
           }
         })
         this.factory.id = '';
@@ -386,33 +409,15 @@ export default {
         this.factory.output.pop();
       }
     },
-    setCombobox() {
-      this.allRessources.forEach(obj => {
+    setCombobox(res, tar) {
+      res.forEach(obj => {
         let input = {
           text: obj.name,
           value: obj.name,
         };
-        this.ressourceItems.push(input);
+        tar.push(input);
       });
     },
-    setNodes() {
-      this.allNodes.forEach(obj => {
-        let input = {
-          text: obj.name,
-          value: obj.name,
-        };
-        this.nodeItems.push(input);
-      });
-    },
-    setTraffic() {
-      this.allTraffic.forEach(obj => {
-        let input = {
-          text: obj.name,
-          value: obj.name,
-        };
-        this.trafficItems.push(input);
-      });
-    }
   },
 };
 </script>

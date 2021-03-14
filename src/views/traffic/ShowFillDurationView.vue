@@ -54,10 +54,6 @@ export default {
       itemsPipe: fillDuration.fillPipeItems,
     };
   },
-  computed: {
-  },
-  methods: {
-  },
 };
 </script>
 

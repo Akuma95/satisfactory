@@ -19,9 +19,6 @@ import {db} from '@/firebase'
 export default {
   name: "RessourceView",
   components: {},
-  props: [
-    'localAllRessources',
-  ],
   watch: {
     allRessources() {
       this.setRessourceTable();
@@ -29,7 +26,6 @@ export default {
   },
   data() {
     return {
-      allRessources: this.localAllRessources,
       ressourceItems: [],
       headers: [
         {
@@ -46,18 +42,29 @@ export default {
       ],
     };
   },
+  computed: {
+    allRessources() {
+      return this.$store.getters.getAllRessources;
+    }
+  },
+  mounted() {
+    this.setRessourceTable();
+  },
   methods: {
     async getSubCol(name, body) {
       await db.collection('ressources').doc(name).collection('alternative').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
+          console.log(f)
           body.id = f.id
           body.alternative = true
           this.ressourceItems.push(body);
+
         })
       })
     },
     setRessourceTable() {
+      this.ressourceItems = []
       this.allRessources.forEach(e => {
         this.ressourceItems.push({
           id: e.id,
@@ -67,7 +74,7 @@ export default {
           liquid: e.liquid
         });
         this.getSubCol(e.name, {
-          id: e.id,
+          id: '',
           name: e.name,
           ore: e.ore,
           alternative: false,

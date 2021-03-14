@@ -10,6 +10,12 @@
             hint="Wähle eine Vekehrslinie"
             @change="setTimeline"
             attach
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-select>
         <v-row v-if="vehicle !== ''">
           <v-col cols="12">
@@ -57,21 +63,10 @@ export default {
   name: "AdminView",
   components: {
   },
-  props: [
-    'localAllTraffic',
-    'localAllTimetable',
-    'localAllStations',
-  ],
   watch: {
     allTimetable() {
       this.setVehicle();
       this.setTimeline();
-    },
-    allTraffic() {
-      //this.setStations();
-    },
-    allStations() {
-      //console.log(this.allStations)
     },
     stationName() {
       this.setStations();
@@ -79,9 +74,6 @@ export default {
   },
   data() {
     return {
-      allTraffic: this.localAllTraffic,
-      allTimetable: this.localAllTimetable,
-      allStations: this.localAllStations,
       isActive: true,
       allVehicle: [],
       vehicle: '',
@@ -92,7 +84,20 @@ export default {
       stations: [],
     };
   },
-  firestore: {
+  computed: {
+    allTraffic() {
+      return this.$store.getters.getAllTraffic;
+    },
+    allTimetable() {
+      return this.$store.getters.getAllTimetable;
+    },
+    allStations() {
+      return this.$store.getters.getAllStations;
+    },
+  },
+  mounted() {
+    this.setVehicle();
+    this.setTimeline();
   },
   methods: {
     async setStations() {

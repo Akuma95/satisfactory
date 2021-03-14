@@ -14,12 +14,8 @@
 <script>
 export default {
   name: "ShowNodesView",
-  props: [
-    'localAllNodes',
-  ],
   data() {
     return {
-      allNodes: this.localAllNodes,
       headers: [
         {
           text: 'Knoten',
@@ -35,6 +31,11 @@ export default {
         { text: 'Unrein Besetzt', value: 'impureBlock' },
       ],
     };
+  },
+  computed: {
+    allNodes() {
+      return this.$store.getters.getAllNodes;
+    },
   },
 };
 </script>

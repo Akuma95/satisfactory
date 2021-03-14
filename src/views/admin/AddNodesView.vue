@@ -7,6 +7,12 @@
             v-model="node.name"
             :items="nodes"
             label="Knotenname"
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-combobox>
       </v-col>
       <v-col cols="4">
@@ -36,22 +42,16 @@
 
 <script>
 import {db} from '@/firebase'
-import firebase from "firebase";
 
 export default {
   name: "RessourceView",
-  props: [
-    'localAllNodes',
-  ],
   watch: {
-    localAllNodes() {
-      //this.allNodes = this.localAllNodes;
+    allNodes() {
       this.setCombobox()
     }
   },
   data() {
     return {
-      allNodes: this.localAllNodes,
       nodes: [],
       node: {
         name: '',
@@ -61,21 +61,15 @@ export default {
       },
     };
   },
+  computed: {
+    allNodes() {
+      return this.$store.getters.getAllNodes;
+    }
+  },
+  mounted() {
+    this.setCombobox()
+  },
   methods: {
-    writeLog(col, doc) {
-      let timestamp = Date.now();
-      let date = new Date(timestamp);
-      let humanDateShort = date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-
-      let log = {
-        who: localStorage.getItem('id') !== '' ? localStorage.getItem('id') : Math.random().toString(36).substr(2, 9),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        kind: 'Add Data',
-        collection: col,
-        document: doc,
-      };
-      db.collection('log').doc(humanDateShort+'||'+doc).set(log);
-    },
     save() {
       let node = {
         name: this.node.name.text,
@@ -88,7 +82,6 @@ export default {
       };
 
       db.collection('nodes').doc(node.name).set(node).then(() => {
-        this.writeLog('nodes', node.name)
         this.node.name = null;
         this.node.pure = null;
         this.node.normal = null;
@@ -107,9 +100,6 @@ export default {
       });
     }
   },
-  mounted() {
-    this.setCombobox();
-  }
 };
 </script>
 

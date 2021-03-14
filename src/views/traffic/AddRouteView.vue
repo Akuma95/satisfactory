@@ -8,6 +8,12 @@
             v-model="traffic.stationKind"
             label="Beförderungsart"
             @change="resetTraffic"
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-combobox>
       </v-col>
       <v-col cols="12" md="4">
@@ -15,6 +21,12 @@
             :items="trafficItems"
             v-model="traffic.stationName"
             :label="traffic.stationKind.value === 'train' ? 'Name des Bahnhofs*' : 'Name der LKW-Station*'"
+            :menu-props="{
+              bottom: true,
+              offsetY: true,
+              offsetOverflow: true,
+              rounded: true,
+            }"
         ></v-combobox>
         <p class="satis-error" v-if="errorSave">Der Name ist leer oder bereits vergeben.</p>
       </v-col>
@@ -74,6 +86,12 @@
                 :items="ressourceItems"
                 v-model="traffic.stationFreight[items-1].freight"
                 label="Ressource"
+                :menu-props="{
+                  bottom: true,
+                  offsetY: true,
+                  offsetOverflow: true,
+                  rounded: true,
+                }"
             ></v-combobox>
           </v-col>
           <v-col cols="12" md="4">
@@ -82,6 +100,12 @@
                 v-model="traffic.stationFreight[items-1].class"
                 :disabled="traffic.stationFreight[items-1].freight.value === 'Platzhalter'"
                 label="Be- / Entladen"
+                :menu-props="{
+                  bottom: true,
+                  offsetY: true,
+                  offsetOverflow: true,
+                  rounded: true,
+                }"
             ></v-combobox>
           </v-col>
           <v-col cols="12" md="4">
@@ -123,14 +147,9 @@
 
 <script>
 import {db} from "@/firebase";
-import firebase from "firebase";
 
 export default {
   name: "AddRouteView",
-  props: [
-    'localAllRessources',
-    'localAllTraffic',
-  ],
   watch: {
     allRessources() {
       this.setCombobox();
@@ -141,8 +160,6 @@ export default {
   },
   data() {
     return {
-      allRessources: this.localAllRessources,
-      allTraffic: this.localAllTraffic,
       errorSave: false,
       unFillItems: [
         {
@@ -191,21 +208,15 @@ export default {
       },
     };
   },
-  methods: {
-    writeLog(col, doc) {
-      let timestamp = Date.now();
-      let date = new Date(timestamp);
-      let humanDateShort = date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-
-      let log = {
-        who: localStorage.getItem('id') !== '' ? localStorage.getItem('id') : Math.random().toString(36).substr(2, 9),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-        kind: 'Add Data',
-        collection: col,
-        document: doc,
-      };
-      db.collection('log').doc(humanDateShort+'||'+doc).set(log);
+  computed: {
+    allRessources() {
+      return this.$store.getters.getAllRessources;
     },
+    allTraffic() {
+      return this.$store.getters.getAllTraffic;
+    }
+  },
+  methods: {
     writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let station = {
@@ -219,7 +230,6 @@ export default {
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
       pathBasic.set(station).then(() => {
-        this.writeLog('traffic', station.name)
         let i = 1
         this.traffic.stationFreight.forEach(e => {
           let freight = {
@@ -229,7 +239,6 @@ export default {
             amount: e.freight.value !== 'Platzhalter' ? e.amount : {transport: '', available: '',}
           };
           db.collection('traffic').doc(station.name).collection("stations").doc(i + e.freight.value).set(freight)
-          this.writeLog('traffic/'+station.name+'/stations', i + e.freight.value)
           i++;
         }).then(() => {
           this.traffic.stationName = '';

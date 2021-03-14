@@ -8,7 +8,7 @@
               <h3 style="color: #dddddd">Einen Bahnhof o. LKW-Station ergänzen</h3>
             </v-expansion-panel-header>
             <v-expansion-panel-content color="#111416">
-              <add-route-view :local-all-ressources="allRessources" :local-all-traffic="allTraffic"></add-route-view>
+              <add-route-view></add-route-view>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -16,7 +16,7 @@
               <h3 style="color: #dddddd">Ein Fahrzeug ergänzen</h3>
             </v-expansion-panel-header>
             <v-expansion-panel-content color="#111416">
-              <add-plan-view :local-all-traffic="allTraffic" :loacl-all-timetable="allTimetable"></add-plan-view>
+              <add-plan-view></add-plan-view>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -32,7 +32,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <train-view :local-all-traffic="allTraffic" :local-all-stations="allStations" :local-all-timetable="allTimetable"></train-view>
+        <train-view></train-view>
       </v-col>
     </v-row>
   </div>
@@ -53,51 +53,6 @@ export default {
     AddRouteView,
     ShowFillDurationView,
     AddPlanView
-  },
-  watch: {
-    allTraffic() {
-      this.getAllStations();
-    },
-  },
-  data() {
-    return {
-      allRessources: [],
-      allTraffic: [],
-      allTimetable: [],
-      allStations: [],
-    };
-  },
-  firestore: {
-    allRessources: db.collection('ressources'),
-    allTraffic: db.collection('traffic'),
-    allTimetable: db.collection('timetable'),
-  },
-  computed: {
-  },
-  methods: {
-    getAllStations() {
-      this.allTraffic.forEach(e => {
-        let main = {
-          kind: e.kind,
-          name: e.name,
-          value: e.value,
-          stations: [],
-        }
-        db.collection('traffic').doc(e.name).collection('stations').get().then(querySnapshot => {
-          let getData = querySnapshot.docs.map(doc => doc.data());
-          getData.forEach(f => {
-            main.stations.push({
-              name: f.name,
-              class: f.class,
-              transport: f.amount.transport,
-              available: f.amount.available,
-              amountMax: f.amount.transport === f.amount.available
-            })
-          })
-        });
-        this.allStations.push(main);
-      });
-    }
   },
 };
 </script>

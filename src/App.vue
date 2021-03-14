@@ -31,7 +31,14 @@ export default {
   },
   created() {
     this.checkAdmin();
-  }
+  },
+  mounted() {
+    this.$store.dispatch("setAllRessources");
+    this.$store.dispatch("setAllNodes");
+    this.$store.dispatch("setAllTraffic");
+    this.$store.dispatch("setAllTimetable");
+    this.$store.dispatch("setAllRessources");
+  },
 }
 </script>
 
