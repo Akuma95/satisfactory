@@ -1,18 +1,42 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Satisfactory Planung</h1>
+    <br>
+    <v-row>
+      <v-col cols="12" md="7">
+        <all-nodes-view :local-all-nodes="allNodes"></all-nodes-view>
+      </v-col>
+      <v-col cols="12" md="5">
+        <storage-view :local-all-ressources="allRessources"></storage-view>
+      </v-col>
+    </v-row>
+    <br>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import AllNodesView from "@/views/overview/AllNodesView";
+import StorageView from "@/views/overview/StorageView";
+
+import {db} from "@/firebase";
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
-  }
+    AllNodesView,
+    StorageView,
+  },
+  data() {
+    return {
+      allNodes: [],
+      allRessources: [],
+    };
+  },
+  firestore: {
+    allNodes: db.collection('nodes'),
+    allRessources: db.collection('ressources')
+  },
+  methods: {
+  },
 }
 </script>

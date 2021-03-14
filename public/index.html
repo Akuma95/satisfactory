@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <title>test</title>
   </head>
   <body>
@@ -13,5 +16,24 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCSzhEbIsfDBy6xBgBXXM0NDfvGVklX0lY",
+            authDomain: "satisfactory-a7a0f.firebaseapp.com",
+            projectId: "satisfactory-a7a0f",
+            storageBucket: "satisfactory-a7a0f.appspot.com",
+            messagingSenderId: "476904004984",
+            appId: "1:476904004984:web:99ed3df8cb41cc33b83c8d"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
   </body>
 </html>

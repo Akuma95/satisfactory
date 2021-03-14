@@ -1,0 +1,72 @@
+{
+  "nodes": {
+    "limestone": {
+      "pure": 27,
+      "normal": 47,
+      "impure": 12
+    },
+    "iron": {
+      "pure": 46,
+      "normal": 41,
+      "impure": 33
+    },
+    "copper": {
+      "pure": 12,
+      "normal": 28,
+      "impure": 9
+    },
+    "caterium": {
+      "pure": 8,
+      "normal": 8,
+      "impure": 0
+    },
+    "coal": {
+      "pure": 15,
+      "normal": 29,
+      "impure": 6
+    },
+    "oil": {
+      "pure": 8,
+      "normal": 12,
+      "impure": 10
+    },
+    "sulfur": {
+      "pure": 3,
+      "normal": 7,
+      "impure": 1
+    },
+    "bauxit": {
+      "pure": 3,
+      "normal": 5,
+      "impure": 5
+    },
+    "rawQuartz": {
+      "pure": 5,
+      "normal": 11,
+      "impure": 0
+    },
+    "Uranium": {
+      "pure": 0,
+      "normal": 3,
+      "impure": 0
+    },
+    "S.A.M.": {
+      "pure": 0,
+      "normal": 5,
+      "impure": 9
+    }
+  },
+  "ressources": [
+    "limestone",
+    "iron",
+    "copper",
+    "caterium",
+    "coal",
+    "oil",
+    "sulfur",
+    "bauxit",
+    "rawQuartz",
+    "Uranium",
+    "S.A.M."
+  ]
+}
