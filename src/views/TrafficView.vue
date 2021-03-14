@@ -44,7 +44,6 @@ import AddRouteView from "@/views/traffic/AddRouteView.vue";
 import ShowFillDurationView from "@/views/traffic/ShowFillDurationView";
 import AddPlanView from "@/views/traffic/AddPlanView";
 
-import {db} from "@/firebase";
 
 export default {
   name: "TrafficView",

@@ -29,8 +29,6 @@ import AddRessourceView from "@/views/admin/AddRessourceView";
 import ShowRessourceView from "@/views/admin/ShowRessourceView";
 import DeleteRessourceView from "@/views/admin/DeleteRessourceView";
 
-import {db} from '@/firebase'
-
 export default {
   name: "AdminView",
   components: {

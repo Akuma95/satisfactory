@@ -18,8 +18,6 @@
 import AllNodesView from "@/views/overview/AllNodesView";
 import StorageView from "@/views/overview/StorageView";
 
-import {db} from "@/firebase";
-
 export default {
   name: 'home',
   components: {

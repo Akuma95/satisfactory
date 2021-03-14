@@ -38,6 +38,7 @@ export default {
     this.$store.dispatch("setAllTraffic");
     this.$store.dispatch("setAllTimetable");
     this.$store.dispatch("setAllRessources");
+    this.$store.dispatch("setAllFactory");
   },
 }
 </script>

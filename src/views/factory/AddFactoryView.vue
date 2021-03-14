@@ -36,7 +36,86 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="4">
+        <span><h2>Node für die Fabrik</h2> <v-btn
+            class="mx-2"
+            icon
+            small
+            color="#333"
+            @click="addNode"
+        >
+            <v-icon dark>
+              mdi-plus
+            </v-icon>
+          </v-btn><v-btn
+            class="mx-2"
+            icon
+            small
+            color="#333"
+            @click="removeNode"
+        >
+            <v-icon dark>
+              mdi-minus
+            </v-icon>
+          </v-btn></span>
+        <br><br>
+        <v-divider style="background-color: #F2C800"></v-divider>
+        <span v-for="node in countNode" :key="node">
+          <div class="input">
+            <v-row>
+              <v-col cols="12">
+                <v-combobox
+                    :items="nodeItems"
+                    v-model="factory.node[node-1].name"
+                    label="Welchen Knoten"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
+                ></v-combobox>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-combobox
+                    :items="purity"
+                    v-model="factory.node[node-1].purity"
+                    label="Reinheit"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
+                ></v-combobox>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                    v-model="factory.node[node-1].countNodes"
+                    label="Anzahl der Knoten"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-autocomplete
+                    :items="trafficItems"
+                    v-model="factory.node[node-1].station"
+                    label="Station"
+                    :menu-props="{
+                      bottom: true,
+                      offsetY: true,
+                      offsetOverflow: true,
+                      rounded: true,
+                    }"
+                ></v-autocomplete>
+              </v-col>
+            </v-row>
+          </div>
+        <v-divider style="background-color: #F2C800"></v-divider>
+        </span>
+      </v-col>
+      <v-col cols="12" md="4">
         <span><h2>Input der Fabrik</h2> <v-btn
             class="mx-2"
             icon
@@ -59,50 +138,9 @@
             </v-icon>
           </v-btn></span>
         <br><br>
-        <v-divider style="background-color: #F2C800"></v-divider>
+        <v-divider style="background-color: #FA0E49"></v-divider>
         <span v-for="input in countInput" :key="input">
           <div class="input">
-            <v-row>
-              <v-col cols="12" md="3">
-                <v-checkbox
-                    v-model="factory.input[input-1].isNode"
-                    color="#D5B000"
-                    label="Knoten"
-                ></v-checkbox>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-combobox
-                    :items="nodeItems"
-                    v-model="factory.input[input-1].node"
-                    label="Welchen Knoten"
-                    :menu-props="{
-                      bottom: true,
-                      offsetY: true,
-                      offsetOverflow: true,
-                      rounded: true,
-                    }"
-                ></v-combobox>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-combobox
-                    :items="purity"
-                    v-model="factory.input[input-1].purity"
-                    label="Reinheit"
-                    :menu-props="{
-                      bottom: true,
-                      offsetY: true,
-                      offsetOverflow: true,
-                      rounded: true,
-                    }"
-                ></v-combobox>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                    v-model="factory.input[input-1].countNodes"
-                    label="Anzahl der Knoten"
-                ></v-text-field>
-              </v-col>
-            </v-row>
             <v-row>
               <v-col cols="12" md="6">
                 <v-combobox
@@ -140,10 +178,10 @@
               </v-col>
             </v-row>
           </div>
-        <v-divider style="background-color: #F2C800"></v-divider>
+        <v-divider style="background-color: #FA0E49"></v-divider>
         </span>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="4">
         <span><h2>Output der Fabrik</h2> <v-btn
             class="mx-2"
             icon
@@ -166,7 +204,7 @@
             </v-icon>
           </v-btn></span>
         <br><br>
-        <v-divider style="background-color: #5ebf00"></v-divider>
+        <v-divider style="background-color: #62c600"></v-divider>
         <span v-for="output in countOutput" :key="output">
           <div class="input">
             <v-row>
@@ -206,7 +244,7 @@
               </v-col>
             </v-row>
           </div>
-          <v-divider style="background-color: #5ebf00"></v-divider>
+          <v-divider style="background-color: #62c600"></v-divider>
         </span>
       </v-col>
     </v-row>
@@ -238,6 +276,7 @@ export default {
   },
   data() {
     return {
+      countNode: 1,
       countInput: 1,
       countOutput: 1,
       nodeItems: [],
@@ -263,11 +302,13 @@ export default {
         powerProduction: '',
         descriptionLocation: '',
         descriptionFactory: '',
-        input: [{
-          isNode: false,
-          node: '',
+        node: [{
+          name: '',
           purity: '',
           countNodes: '',
+          station: '',
+        }],
+        input: [{
           resource: '',
           countRessource: '',
           station: '',
@@ -309,44 +350,48 @@ export default {
           location: this.factory.descriptionLocation,
           factory: this.factory.descriptionFactory,
         },
+        node: this.factory.node,
         input: this.factory.input,
-        outout: this.factory.output
+        output: this.factory.output
       };
       //Den Pfad erstellen zur DB.
-      let pathBasic = db.collection('factory').doc(fabric.name)
+      let pathFactory = db.collection('factory').doc(fabric.name)
       let pathRessource = db.collection('ressources')
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
-      pathBasic.set(fabric).then(() => {
-        fabric.input.forEach(f => {
-          if (f.isNode) {
+      pathFactory.set(fabric).then(() => {
+        db.collection('nodes').get().then(querySnapshot => {
+          let data = querySnapshot.docs.map(doc => doc.data());
+          data.forEach(e => {
             //set blocked Nodes
-            db.collection('nodes').get().then(querySnapshot => {
-              let data = querySnapshot.docs.map(doc => doc.data());
-              data.forEach(e => {
-                if (e.name === f.node.value) {
-                  let blocked = {
-                    impure: e.impure,
-                    normal: e.normal,
-                    pure: e.pure,
-                    name: e.name,
-                    impureBlock: parseInt(e.impureBlock),
-                    normalBlock: parseInt(e.normalBlock),
-                    pureBlock: parseInt(e.pureBlock),
-                  }
-                  f.purity.value === 'pure' ? blocked.impureBlock+=parseInt(f.countNodes) : blocked.impureBlock = e.impureBlock
-                  f.purity.value === 'normal' ? blocked.normalBlock+=parseInt(f.countNodes) : blocked.normalBlock = e.normalBlock
-                  f.purity.value === 'impure' ? blocked.pureBlock+=parseInt(f.countNodes) : blocked.pureBlock = e.pureBlock
-                  db.collection('nodes').doc(e.name).set(blocked);
+            let blocked = {
+              impure: 0,
+              normal: 0,
+              pure: 0,
+            }
+            let safe = false;
+            fabric.node.forEach(f=> {
+              if (f.name.value === e.name) {
+                if (f.purity.value === 'pure') {
+                  blocked.pure += parseInt(f.countNodes);
+                } else if (f.purity.value === 'normal') {
+                  blocked.normal += parseInt(f.countNodes);
+                } else if (f.purity.value === 'impure') {
+                  blocked.impure += parseInt(f.countNodes);
                 }
-              })
-            });
+                safe = true;
+              }
+            })
+            if (safe) {
+              db.collection('nodes').doc(e.name).collection('blocked').doc(fabric.name).set(blocked);
+            }
+          })
+        })
+        fabric.input.forEach(e => {
+          if (e.resource !== '') {
+            let input = {amount: e.countRessource};
+            pathRessource.doc(e.resource.value).collection('need').doc(fabric.name).set(input);
           }
-          if (f.resource.value !== '') {
-            let input = {amount: f.countRessource};
-            pathRessource.doc(f.resource.value).collection('need').doc(fabric.name).set(input);
-          }
-
         })
         fabric.outout.forEach(e => {
           if (e.resource !== '') {
@@ -354,36 +399,48 @@ export default {
             pathRessource.doc(e.resource.value).collection('produce').doc(fabric.name).set(output);
           }
         })
-        this.factory.id = '';
-        this.factory.powerUsage = '';
-        this.factory.powerProduction = '';
-        this.factory.descriptionLocation = '';
-        this.factory.descriptionFactory = '';
-        this.factory.input = [{
-          isNode: false,
-          node: '',
-          countNodes: '',
-          resource: '',
-          countRessource: '',
-          station: '',
-        }];
-        this.factory.output = [{
-          resource: '',
-          countRessource: '',
-          station: '',
-        }];
+        // TODO: Fehlermeldung "Cannot read property of 'name'
+        this.factory = {
+          id: '',
+          powerUsage: '',
+          powerProduction: '',
+          descriptionLocation: '',
+          descriptionFactory: '',
+          node: [{
+            name: '',
+            purity: '',
+            countNodes: '',
+            station: '',
+          }],
+          input: [{
+            resource: '',
+            countRessource: '',
+            station: '',
+          }],
+          output: [{
+            resource: '',
+            countRessource: '',
+            station: '',
+          }],
+        };
       })
       //in DB schreiben - ende
     },
     save() {
       this.writeDB();
     },
+    addNode () {
+      this.countNode++;
+      this.factory.node.push({
+        name: '',
+        purity: '',
+        countNodes: '',
+        station: '',
+      });
+    },
     addInput () {
       this.countInput++;
       this.factory.input.push({
-        isNode: false,
-        node: '',
-        countNodes: '',
         resource: '',
         countRessource: '',
         station: '',
@@ -396,6 +453,12 @@ export default {
         countRessource: '',
         station: '',
       });
+    },
+    removeNode () {
+      if (this.countNode>1) {
+        this.countNode--;
+        this.factory.node.pop();
+      }
     },
     removeInput () {
       if (this.countInput>1) {

@@ -10,7 +10,8 @@ export default new Vuex.Store({
     allNodes: [],
     allTraffic: [],
     allTimetable: [],
-    allStations: []
+    allStations: [],
+    allFactory: []
   },
   mutations: {
     setAllRessources(state, payload) {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     },
     setAllStations(state, payload) {
       state.allStations = payload;
+    },
+    setAllFactory(state, payload) {
+      state.allFactory = payload;
     },
   },
   actions: {
@@ -58,6 +62,8 @@ export default new Vuex.Store({
           res.push(f);
         });
         state.commit("setAllTraffic", res)
+      }).then(() => {
+        //state.dispatch("setAllStations");
       })
     },
     async setAllTimetable(state) {
@@ -70,7 +76,17 @@ export default new Vuex.Store({
         state.commit("setAllTimetable", res)
       })
     },
-    setallStations(state) {
+    async setAllFactory(state) {
+      let res = []
+      await db.collection('factory').get().then(querySnapshot => {
+        let data = querySnapshot.docs.map(doc => doc.data());
+        data.forEach(f => {
+          res.push(f);
+        });
+        state.commit("setAllFactory", res)
+      })
+    },
+    setAllStations(state) {
       let res = [];
       state.allTraffic.forEach(e => {
         let main = {
@@ -103,5 +119,6 @@ export default new Vuex.Store({
     getAllTraffic: state => state.allTraffic,
     getAllTimetable: state => state.allTimetable,
     getAllStations: state => state.allStations,
+    getAllFactory: state => state.allFactory,
   }
 })
