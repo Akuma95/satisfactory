@@ -54,7 +54,7 @@ h1 {
 }
 #nav {
   padding: 30px;
-  background-color: #111416;
+  background-color: #f50000;
   width: 40%;
   margin: 0 auto 20px;
   border-bottom-right-radius: 30px;
