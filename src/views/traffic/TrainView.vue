@@ -129,6 +129,9 @@ export default {
         })
       })
     },
+
+    /** TODO: Die Farben der Punkte werden noch nicht richtig angezeigt*/
+
     setTimeline() {
       this.timetable = [];
       this.allTimetable.forEach(e => {

@@ -55,7 +55,6 @@ export default {
       await db.collection('ressources').doc(name).collection('alternative').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
-          console.log(f)
           body.id = f.id
           body.alternative = true
           this.ressourceItems.push(body);
