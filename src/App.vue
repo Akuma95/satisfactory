@@ -69,6 +69,10 @@ export default {
   data() {
     return {
       adminShow: false,
+      setGame: true,
+      spielstand: '',
+      newSpielstand: '',
+      dialog: false,
     };
   },
   methods: {
@@ -78,11 +82,23 @@ export default {
       }
       this.adminShow = localStorage.getItem('isAdmin')
     },
+    getSpielstand() {
+      this.spielstand = localStorage.getItem('spielstand');
+    },
+    setSpielstand() {
+      if (this.newSpielstand !== '' && this.newSpielstand !== ' ') {
+        localStorage.setItem('spielstand', this.newSpielstand);
+      }
+      this.newSpielstand = '';
+      location.reload()
+    }
   },
   created() {
     this.checkAdmin();
   },
   mounted() {
+    this.getSpielstand();
+    this.$store.dispatch("isSetGame");
     this.$store.dispatch("setAllRessources");
     this.$store.dispatch("setBasicRessources");
     this.$store.dispatch("setAllNodes");

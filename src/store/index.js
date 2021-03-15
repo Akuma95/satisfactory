@@ -13,9 +13,13 @@ export default new Vuex.Store({
     allTraffic: [],
     allTimetable: [],
     allStations: [],
-    allFactory: []
+    allFactory: [],
+    setGame: false,
   },
   mutations: {
+    isSetGame(state, payload) {
+      state.setGame = payload
+    },
     setAllRessources(state, payload) {
       state.allRessources = payload;
     },
@@ -42,6 +46,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async isSetGame(state) {
+      if (localStorage.getItem('spielstand') !== null) {
+        state.commit("isSetGame", true)
+      }
+    },
     async setAllRessources(state) {
       let prepared
       if (location.host !== 'localhost:8080') {
@@ -181,5 +190,6 @@ export default new Vuex.Store({
     getAllTimetable: state => state.allTimetable,
     getAllStations: state => state.allStations,
     getAllFactory: state => state.allFactory,
+    getIsSetGame: state => state.setGame,
   }
 })

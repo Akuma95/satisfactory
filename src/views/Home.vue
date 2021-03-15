@@ -14,11 +14,13 @@
       <br>
     </span>
     <div id="wrapper" v-else>
-      <p>Willkommen</p>
-      <p>hier kannst du deine Fabriken hinterlegen und hast so einen Super überblick.</p>
-      <p>Um zu starten musst du vorher kurz <b>oben rechts auf den gelben Button</b> klicken.</p>
-      <p>Dort kannst du den Namen deines Spielstandes eintragen und ändern.</p>
-      <p>Diesen Namen kannst du dann mit deinen Freunden teilen und so gemeinsam an einer Fabrik arbeiten.</p>
+      <h2>Willkommen</h2>
+      <p>
+        hier kannst du deine Fabriken hinterlegen und hast so einen Super überblick. <br>
+        Um zu starten musst du vorher kurz <b>oben rechts auf den gelben Button</b> klicken. <br>
+        Dort kannst du den Namen deines Spielstandes eintragen und ändern. <br>
+        Diesen Namen kannst du dann mit deinen Freunden teilen und so gemeinsam an einer Fabrik arbeiten.
+      <p/>
     </div>
   </div>
 </template>
@@ -33,5 +35,20 @@ export default {
     AllNodesView,
     StorageView,
   },
+  computed: {
+    setGame() {
+      return this.$store.getters.getIsSetGame;
+    },
+  },
 }
 </script>
+
+<style scoped>
+#wrapper {
+  background-color: #dddddd;
+  border-radius: 20px;
+  width: 90%;
+  margin: 20px auto;
+  padding: 10px 20px;
+}
+</style>
