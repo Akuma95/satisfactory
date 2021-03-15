@@ -28,6 +28,7 @@
               rounded: true,
             }"
         ></v-combobox>
+        {{timetable.name}}
         <p class="satis-error" v-if="errorSave">Der Name ist leer oder bereits vergeben.</p>
       </v-col>
       <v-col cols="12" md="4">
@@ -101,7 +102,7 @@
 </template>
 
 <script>
-import {db} from "@/firebase";
+import {db} from "@/firebase/firebase";
 
 export default {
   name: "AddPlanView",
@@ -158,7 +159,7 @@ export default {
     this.setCombobox(this.allTraffic, this.trafficItems);
   },
   methods: {
-    writeDB() {
+    async writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let timetable = {
         name: this.timetable.name,
@@ -168,7 +169,13 @@ export default {
         station: this.timetable.station,
       };
       //Den Pfad erstellen zur DB.
-      let pathBasic = db.collection('timetable').doc(timetable.name)
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
+      let pathBasic = prepared.collection('timetable').doc(timetable.name)
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
       pathBasic.set(timetable).then(() => {
@@ -187,14 +194,18 @@ export default {
       if (this.timetable.name === '') {
         this.errorSave = true;
       } else {
+        if (this.timetableItems.length > 0) {
         this.timetableItems.forEach(e => {
-          if (e.value === this.timetable.name.value) {
+          if (e.value === this.timetable.name) {
             this.errorSave = true;
           } else {
-            this.writeDB();
+            this.writeDB().then(()=>{location.reload()});
             return false;
           }
         })
+        } else {
+          this.writeDB().then(()=>{location.reload()});
+        }
       }
     },
 
@@ -213,6 +224,7 @@ export default {
       }
     },
     setCombobox(res, tar) {
+      console.log(res)
       res.forEach(obj => {
         let input = {
           text: obj.name,

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {db} from "@/firebase";
+import {db} from "@/firebase/firebase";
 
 export default {
   name: "ShowNodesView",
@@ -33,9 +33,14 @@ export default {
       storage: [],
     };
   },
+  watch: {
+    allRessources() {
+      this.setTable();
+    }
+  },
   computed: {
     allRessources() {
-      return this.$store.getters.getAllRessources;
+      return this.$store.getters.getBasicRessources;
     }
   },
   mounted() {
@@ -43,8 +48,14 @@ export default {
   },
   methods: {
     async getNeeded(name) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       let needed = 0;
-      await db.collection('ressources').doc(name).collection('need').get().then(querySnapshot => {
+      await prepared.collection('ressources').doc(name).collection('need').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
           needed+=parseInt(f.amount)
@@ -53,8 +64,14 @@ export default {
       return needed;
     },
     async getProduce(name) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       let produce = 0;
-      await db.collection('ressources').doc(name).collection('produce').get().then(querySnapshot => {
+      await prepared.collection('ressources').doc(name).collection('produce').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
           produce+=parseInt(f.amount)

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase'
+import {db} from '@/firebase/firebase'
 
 export default {
   name: "RessourceView",
@@ -72,7 +72,7 @@ export default {
   methods: {
     save() {
       let node = {
-        name: this.node.name.text,
+        name: this.node.name.text ? this.node.name.text : this.node.name,
         pure: this.node.pure,
         normal: this.node.normal,
         impure: this.node.impure,
@@ -81,6 +81,7 @@ export default {
         impureBlock: 0,
       };
 
+      console.log(node.name)
       db.collection('nodes').doc(node.name).set(node).then(() => {
         this.node.name = null;
         this.node.pure = null;

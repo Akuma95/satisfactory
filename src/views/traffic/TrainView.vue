@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase'
+import {db} from '@/firebase/firebase'
 
 export default {
   name: "AdminView",
@@ -122,6 +122,7 @@ export default {
       })
     },
     setVehicle() {
+      console.log(this.allTimetable)
       this.allTimetable.forEach(e => {
         this.allVehicle.push({
           text: e.name,

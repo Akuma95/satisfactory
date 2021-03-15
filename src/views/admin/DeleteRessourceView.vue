@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase'
+import {db} from '@/firebase/firebase'
 
 export default {
   name: "RessourceView",
@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getAllRessources;
+      return this.$store.getters.getBasicRessources;
     }
   },
   mounted() {
@@ -75,7 +75,7 @@ export default {
           path :
           path.collection('alternative').doc(this.selectedRessource.value);
       path.delete();
-      this.setCombobox();
+      location.reload()
     },
 
     changeSelctedRessource() {
@@ -97,7 +97,6 @@ export default {
                   hint: 'Dies ist ein Alternativ Rezept',
                 };
                 this.items.push(input);
-                this.selectedRessource = input;
               });
             })
         let input = {
@@ -108,7 +107,6 @@ export default {
           hint: 'Dies ist ein Original Rezept',
         };
         this.items.push(input);
-        this.selectedRessource = input;
       });
     },
   },

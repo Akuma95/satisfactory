@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase'
+import {db} from '@/firebase/firebase'
 
 export default {
   name: "RessourceView",
@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getAllRessources;
+      return this.$store.getters.getBasicRessources;
     }
   },
   mounted() {

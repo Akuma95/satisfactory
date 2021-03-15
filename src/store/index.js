@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {db} from '@/firebase'
+import {db} from '@/firebase/firebase'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     allRessources: [],
+    basicRessources: [],
     allNodes: [],
+    basicNodes: [],
     allTraffic: [],
     allTimetable: [],
     allStations: [],
@@ -19,6 +21,12 @@ export default new Vuex.Store({
     },
     setAllNodes(state, payload) {
       state.allNodes = payload;
+    },
+    setBasicRessources(state, payload) {
+      state.basicRessources = payload;
+    },
+    setBasicNodes(state, payload) {
+      state.basicNodes = payload;
     },
     setAllTraffic(state, payload) {
       state.allTraffic = payload;
@@ -35,8 +43,15 @@ export default new Vuex.Store({
   },
   actions: {
     async setAllRessources(state) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        console.log('Test Datenbank')
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       let res = []
-      await db.collection('ressources').get().then(querySnapshot => {
+      await prepared.collection('ressources').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
           res.push(f);
@@ -44,9 +59,25 @@ export default new Vuex.Store({
         state.commit("setAllRessources", res)
       })
     },
-    async setAllNodes(state) {
+    async setBasicRessources(state) {
       let res = []
-      await db.collection('nodes').get().then(querySnapshot => {
+      await db.collection('ressources').get().then(querySnapshot => {
+        let data = querySnapshot.docs.map(doc => doc.data());
+        data.forEach(f => {
+          res.push(f);
+        });
+        state.commit("setBasicRessources", res)
+      })
+    },
+    async setAllNodes(state) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
+      let res = []
+      await prepared.collection('nodes').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
           res.push(f);
@@ -54,9 +85,25 @@ export default new Vuex.Store({
         state.commit("setAllNodes", res)
       })
     },
-    async setAllTraffic(state) {
+    async setBasicNodes(state) {
       let res = []
-      await db.collection('traffic').get().then(querySnapshot => {
+      await db.collection('nodes').get().then(querySnapshot => {
+        let data = querySnapshot.docs.map(doc => doc.data());
+        data.forEach(f => {
+          res.push(f);
+        });
+        state.commit("setBasicNodes", res)
+      })
+    },
+    async setAllTraffic(state) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
+      let res = []
+      await prepared.collection('traffic').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
           res.push(f);
@@ -67,8 +114,14 @@ export default new Vuex.Store({
       })
     },
     async setAllTimetable(state) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       let res = []
-      await db.collection('timetable').get().then(querySnapshot => {
+      await prepared.collection('timetable').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
           res.push(f);
@@ -77,8 +130,14 @@ export default new Vuex.Store({
       })
     },
     async setAllFactory(state) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       let res = []
-      await db.collection('factory').get().then(querySnapshot => {
+      await prepared.collection('factory').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
           res.push(f);
@@ -116,6 +175,8 @@ export default new Vuex.Store({
   getters: {
     getAllRessources: state => state.allRessources,
     getAllNodes: state => state.allNodes,
+    getBasicRessources: state => state.basicRessources,
+    getBasicNodes: state => state.basicNodes,
     getAllTraffic: state => state.allTraffic,
     getAllTimetable: state => state.allTimetable,
     getAllStations: state => state.allStations,

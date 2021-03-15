@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase'
+import {db} from '@/firebase/firebase'
 
 export default {
   name: "DeleteFactoryView",
@@ -75,14 +75,21 @@ export default {
   },
   methods: {
     deleteFactory() {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        console.log('Test Datenbank')
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       this.allRessources.forEach(e => {
-        db.collection('ressources').doc(e.id).collection('need').doc(this.selctedFactory.value).delete();
-        db.collection('ressources').doc(e.id).collection('produce').doc(this.selctedFactory.value).delete();
+        prepared.collection('ressources').doc(e.id).collection('need').doc(this.selctedFactory.value).delete();
+        prepared.collection('ressources').doc(e.id).collection('produce').doc(this.selctedFactory.value).delete();
       })
       this.allNodes.forEach(e => {
-        db.collection('nodes').doc(e.name).collection('block').doc(this.selctedFactory.value).delete();
+        prepared.collection('nodes').doc(e.name).collection('blocked').doc(this.selctedFactory.value).delete();
       })
-      db.collection('factory').doc(this.selctedFactory.value).delete();
+      prepared.collection('factory').doc(this.selctedFactory.value).delete();
       this.$store.dispatch("setAllRessources");
       this.$store.dispatch("setAllNodes");
       this.$store.dispatch("setAllFactory").then(()=>{

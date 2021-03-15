@@ -259,7 +259,7 @@
 </template>
 
 <script>
-import {db} from "@/firebase";
+import {db} from "@/firebase/firebase";
 
 export default {
   name: "RessourceView",
@@ -323,13 +323,13 @@ export default {
   },
   computed: {
     allNodes() {
-      return this.$store.getters.getAllNodes;
+      return this.$store.getters.getBasicNodes;
     },
     allTraffic() {
       return this.$store.getters.getAllTraffic;
     },
     allRessources() {
-      return this.$store.getters.getAllRessources;
+      return this.$store.getters.getBasicRessources;
     },
   },
   mounted() {
@@ -355,8 +355,15 @@ export default {
         output: this.factory.output
       };
       //Den Pfad erstellen zur DB.
-      let pathFactory = db.collection('factory').doc(fabric.name)
-      let pathRessource = db.collection('ressources')
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        console.log('Test Datenbank')
+        prepared = db.collection('login').doc('TestSpiel');
+      }
+      let pathFactory = prepared.collection('factory').doc(fabric.name)
+      let pathRessource = prepared.collection('ressources')
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
       pathFactory.set(fabric).then(() => {
@@ -383,7 +390,7 @@ export default {
               }
             })
             if (safe) {
-              db.collection('nodes').doc(e.name).collection('blocked').doc(fabric.name).set(blocked);
+              prepared.collection('nodes').doc(e.name).collection('blocked').doc(fabric.name).set(blocked);
             }
           })
         })
@@ -393,13 +400,14 @@ export default {
             pathRessource.doc(e.resource.value).collection('need').doc(fabric.name).set(input);
           }
         })
-        fabric.outout.forEach(e => {
+        fabric.output.forEach(e => {
           if (e.resource !== '') {
             let output = {amount: e.countRessource};
             pathRessource.doc(e.resource.value).collection('produce').doc(fabric.name).set(output);
           }
         })
         // TODO: Fehlermeldung "Cannot read property of 'name'
+        location.reload()
         this.factory = {
           id: '',
           powerUsage: '',

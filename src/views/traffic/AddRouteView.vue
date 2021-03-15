@@ -17,8 +17,7 @@
         ></v-combobox>
       </v-col>
       <v-col cols="12" md="4">
-        <v-combobox
-            :items="trafficItems"
+        <v-text-field
             v-model="traffic.stationName"
             :label="traffic.stationKind.value === 'train' ? 'Name des Bahnhofs*' : 'Name der LKW-Station*'"
             :menu-props="{
@@ -27,7 +26,7 @@
               offsetOverflow: true,
               rounded: true,
             }"
-        ></v-combobox>
+        ></v-text-field>
         <p class="satis-error" v-if="errorSave">Der Name ist leer oder bereits vergeben.</p>
       </v-col>
       <v-col cols="12" md="4">
@@ -146,7 +145,7 @@
 </template>
 
 <script>
-import {db} from "@/firebase";
+import {db} from "@/firebase/firebase";
 
 export default {
   name: "AddRouteView",
@@ -210,14 +209,14 @@ export default {
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getAllRessources;
+      return this.$store.getters.getBasicRessources;
     },
     allTraffic() {
       return this.$store.getters.getAllTraffic;
     }
   },
   methods: {
-    writeDB() {
+    async writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let station = {
         name: this.traffic.stationName,
@@ -226,7 +225,13 @@ export default {
         kind: this.traffic.stationKind.value,
       };
       //Den Pfad erstellen zur DB.
-      let pathBasic = db.collection('traffic').doc(station.name)
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
+      let pathBasic = prepared.collection('traffic').doc(station.name)
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
       pathBasic.set(station).then(() => {
@@ -238,42 +243,32 @@ export default {
             isFluid: e.freight.value !== 'Platzhalter' ? e.isFluid : '',
             amount: e.freight.value !== 'Platzhalter' ? e.amount : {transport: '', available: '',}
           };
-          db.collection('traffic').doc(station.name).collection("stations").doc(i + e.freight.value).set(freight)
-          i++;
-        }).then(() => {
-          this.traffic.stationName = '';
-          this.traffic.stationValue = 1;
-          this.traffic.stationKind = {
-            text: 'Zug',
-            value: 'train'
-          };
-          this.traffic.stationFreight = [
-            {
-              isFluid: false,
-              class: '',
-              freight: '',
-              amount: {
-                transport: '',
-                available: '',
-              },
-            }
-          ];
+          if(e.freight.value !== undefined) {
+            prepared.collection('traffic').doc(station.name).collection("stations").doc(i + e.freight.value).set(freight)
+            i++;
+          }
         })
       });
       //in DB schreiben - ende
     },
     save() {
-      if (this.traffic.stationName === '') {
+      let stationName = this.traffic.stationName
+      if (stationName === '') {
         this.errorSave = true;
       } else {
-        this.trafficItems.forEach(e => {
-          if (e.value === this.traffic.stationName.value) {
-            this.errorSave = true;
-          } else {
-            this.writeDB();
-            return false;
-          }
-        })
+        if (this.trafficItems.length > 0) {
+          this.trafficItems.forEach(e => {
+            if (e.value === stationName) {
+              this.errorSave = true;
+            } else {
+              this.writeDB().then(()=>{location.reload()});
+              return false;
+            }
+          })
+        } else {
+          this.writeDB().then(()=>{location.reload()});
+        }
+
       }
       //Error Check - ende && Funktion Save - Ende
     },

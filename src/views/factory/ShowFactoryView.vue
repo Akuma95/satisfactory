@@ -1,6 +1,6 @@
 <template>
-  <div id="wrapper" class="pa-0 mt-4">
-    <span v-for="factory in allFactory" :key="factory.name" class="wrapper">
+  <div>
+    <div v-for="factory in allFactory" :key="factory.name" id="wrapper" class="pa-6 my-6">
       <v-row>
         <v-col cols="2"></v-col>
         <v-col cols="2">
@@ -87,16 +87,13 @@
           </v-row>
         </v-col>
       </v-row>
-    </span>
+    </div>
   </div>
 </template>
 
 <script>
-import {db} from "@/firebase";
-
 export default {
   name: "TrafficView",
-
   computed: {
     allFactory() {
       return this.$store.getters.getAllFactory;
@@ -107,28 +104,10 @@ export default {
       sheet: false,
     };
   },
-  methods: {
-    deleteFactory(name) {
-      this.allRessources.forEach(e => {
-        db.collection('ressources').doc(e.id).collection('need').doc(name).delete();
-        db.collection('ressources').doc(e.id).collection('produce').doc(name).delete();
-      })
-      this.allNodes.forEach(e => {
-        db.collection('nodes').doc(e.name).collection('block').doc(name).delete();
-      })
-      db.collection('factory').doc(this.selctedFactory.value).delete();
-      this.$store.dispatch("setAllRessources");
-      this.$store.dispatch("setAllNodes");
-      this.$store.dispatch("setAllFactory").then(()=>{
-        location.reload()
-      });
-    },
-  }
 };
 </script>
 
 <style scoped>
-
 #wrapper {
   border-radius: 20px;
   background-color: #dddddd;
