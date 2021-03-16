@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <h2>Verbrauch Anzeigen</h2>
+    <h2>Verbrauch</h2>
     <p>Die Werte sind pro Minute.</p>
     <v-data-table
         :headers="headers"

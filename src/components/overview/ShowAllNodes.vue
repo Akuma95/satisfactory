@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <h2>Knoten Anzeigen</h2>
+    <h2>Resourcenknoten</h2>
     <v-data-table
         :headers="headers"
         :items="items"

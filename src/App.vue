@@ -128,6 +128,11 @@ export default {
       return this.$store.getters.getAllGames;
     },
   },
+  watch: {
+    allGames() {
+      this.getLocalSavegame();
+    }
+  },
   methods: {
     checkAdmin() {
       if (localStorage.getItem('isAdmin') !== undefined) {
@@ -137,7 +142,7 @@ export default {
     getFormSavegame() {
       this.gameAssigned = false;
       this.failPW = false;
-      let spielstand = this.newSpielstand;
+      let spielstand = this.newSpielstand.toLowerCase();
       let password = this.newPassword;
       this.allGames.forEach(game => {
         if (spielstand === game.name) {
@@ -169,10 +174,8 @@ export default {
       let spielstand = localStorage.getItem('spielstand');
       let password = localStorage.getItem('password');
       this.allGames.forEach(game => {
-        if (spielstand === game.id) {
+        if (spielstand === game.name) {
           if (password === game.password) {
-            this.spielstand = spielstand
-            this.password = password
             this.$store.dispatch("isSetGame");
             this.$store.dispatch("setAllRessources");
             this.$store.dispatch("setBasicRessources");
@@ -190,15 +193,15 @@ export default {
       this.gameAssigned = false;
       this.failPW = false;
       this.allGames.forEach(game => {
-        if (game.name === this.newSpielstand) {
+        if (game.name === this.newSpielstand.toLowerCase()) {
           localStorage.setItem('spielstand', '');
           localStorage.setItem('password', '');
           this.gameAssigned = true;
         } else {
           if (this.newSpielstand !== '' && this.newSpielstand !== ' ') {
-            localStorage.setItem('spielstand', this.newSpielstand);
+            localStorage.setItem('spielstand', this.newSpielstand.toLowerCase());
             localStorage.setItem('password', this.newPassword);
-            db.collection('login').doc(this.newSpielstand).set({password:this.newPassword, name:this.newSpielstand}).then(()=>{
+            db.collection('login').doc(this.newSpielstand.toLowerCase()).set({password:this.newPassword, name:this.newSpielstand.toLowerCase()}).then(()=>{
               this.$store.dispatch("isSetGame");
               this.$store.dispatch("setAllRessources");
               this.$store.dispatch("setBasicRessources");
@@ -209,6 +212,7 @@ export default {
               this.$store.dispatch("setAllRessources");
               this.$store.dispatch("setAllFactory");
               this.newSpielstand = '';
+              this.newPassword = '';
               location.reload()
             })
           }

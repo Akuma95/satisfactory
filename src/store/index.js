@@ -70,7 +70,7 @@ export default new Vuex.Store({
       if (location.host !== 'localhost:8080') {
         prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
       } else {
-        console.log('Test Datenbank')
+        //console.log('Test Datenbank')
         prepared = db.collection('login').doc('TestSpiel');
       }
       let res = []
