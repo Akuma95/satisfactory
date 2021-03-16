@@ -7,7 +7,7 @@
     <v-row>
       <v-col cols="3" md="3"></v-col>
       <v-col cols="6" md="6" id="nav">
-        <span v-if="setGame" class="mt-2">
+        <span v-if="setGame" class="mt-2" style="color: #F2C800">
           <router-link to="/">Home</router-link> |
           <router-link to="/traffic">Verkehr</router-link> |
           <router-link to="/factory">Fabrik</router-link><span v-if="adminShow"> |

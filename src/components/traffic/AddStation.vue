@@ -187,6 +187,10 @@ export default {
         {
           text: 'Schlepper',
           value: 'tractor'
+        },
+        {
+          text: 'Drohne',
+          value: 'drone'
         }
       ],
       traffic: {
