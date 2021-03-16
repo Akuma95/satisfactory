@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 style="color: #F2C800">Satisfactory Planung</h1>
+    <h1>Satisfactory Planungstool</h1>
     <span v-if="setGame">
       <br>
       <v-row>
@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import AllNodesView from "@/views/overview/AllNodesView";
-import StorageView from "@/views/overview/StorageView";
+import AllNodesView from "@/components/overview/ShowAllNodes";
+import StorageView from "@/components/overview/ShowStorage";
 
 export default {
   name: 'home',

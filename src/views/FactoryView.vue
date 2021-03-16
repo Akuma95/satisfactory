@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import AddFactoryView from "@/views/factory/AddFactoryView";
-import DeleteFactoryView from "@/views/factory/DeleteFactoryView";
-import ShowFactoryView from "@/views/factory/ShowFactoryView";
+import AddFactoryView from "@/components/factory/AddFactory";
+import DeleteFactoryView from "@/components/factory/DeleteFactory";
+import ShowFactoryView from "@/components/factory/ShowFactory";
 
 export default {
   name: "FactoryView",

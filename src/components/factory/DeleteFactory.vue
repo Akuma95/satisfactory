@@ -27,6 +27,7 @@
             style="height: 56px; color: #ddd; width: 100%"
             color="#ad1010"
             :disabled="!disableBtn"
+            v-if="showBtn"
             @click="deleteFactory"
         >Löschen</v-btn>
       </v-col>
@@ -55,6 +56,7 @@ export default {
   data() {
     return {
       disableBtn: false,
+      showBtn: false,
       selctedFactory: '',
       items: []
     };
@@ -72,14 +74,20 @@ export default {
   },
   mounted() {
     this.setCombobox();
+    this.showBtnM();
   },
   methods: {
+    showBtnM() {
+      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
+        this.showBtn = true
+      }
+      this.showBtn = false
+    },
     deleteFactory() {
       let prepared
       if (location.host !== 'localhost:8080') {
         prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
       } else {
-        console.log('Test Datenbank')
         prepared = db.collection('login').doc('TestSpiel');
       }
       this.allRessources.forEach(e => {

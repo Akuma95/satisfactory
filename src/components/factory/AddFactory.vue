@@ -5,7 +5,7 @@
       <v-col cols="12" md="6">
         <v-text-field
             v-model="factory.id"
-            label="Fabrikname"
+            label="Fabrikname*"
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="3">
@@ -251,7 +251,12 @@
     <v-row>
       <v-col cols="1"></v-col>
       <v-col cols="10">
-        <v-btn @click="save" style="background-color: #F2C800">Speichern</v-btn>
+        <v-btn
+            @click="save"
+            style="background-color: #F2C800"
+            :disabled="factory.id===''"
+            v-if="showBtn"
+        >Speichern</v-btn>
       </v-col>
       <v-col cols="1"></v-col>
     </v-row>
@@ -277,6 +282,7 @@ export default {
   data() {
     return {
       countNode: 1,
+      showBtn: false,
       countInput: 1,
       countOutput: 1,
       nodeItems: [],
@@ -336,8 +342,15 @@ export default {
     this.setCombobox(this.allNodes, this.nodeItems)
     this.setCombobox(this.allTraffic, this.trafficItems)
     this.setCombobox(this.allRessources, this.ressourceItems)
+    this.showBtnM();
   },
   methods: {
+    showBtnM() {
+      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
+        this.showBtn = true
+      }
+      this.showBtn = false
+    },
     writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let fabric = {
@@ -359,7 +372,6 @@ export default {
       if (location.host !== 'localhost:8080') {
         prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
       } else {
-        console.log('Test Datenbank')
         prepared = db.collection('login').doc('TestSpiel');
       }
       let pathFactory = prepared.collection('factory').doc(fabric.name)
@@ -376,7 +388,7 @@ export default {
               normal: 0,
               pure: 0,
             }
-            let safe = false;
+            let save = false;
             fabric.node.forEach(f=> {
               if (f.name.value === e.name) {
                 if (f.purity.value === 'pure') {
@@ -386,10 +398,10 @@ export default {
                 } else if (f.purity.value === 'impure') {
                   blocked.impure += parseInt(f.countNodes);
                 }
-                safe = true;
+                save = true;
               }
             })
-            if (safe) {
+            if (save) {
               prepared.collection('nodes').doc(e.name).collection('blocked').doc(fabric.name).set(blocked);
             }
           })

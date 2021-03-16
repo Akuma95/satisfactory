@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import NodesView from "@/views/admin/AddNodesView";
-import ShowNodesView from "@/views/admin/ShowNodesView";
-import AddRessourceView from "@/views/admin/AddRessourceView";
-import ShowRessourceView from "@/views/admin/ShowRessourceView";
-import DeleteRessourceView from "@/views/admin/DeleteRessourceView";
+import NodesView from "@/components/admin/AddNodes";
+import ShowNodesView from "@/components/admin/ShowNodes";
+import AddRessourceView from "@/components/admin/AddRessource";
+import ShowRessourceView from "@/components/admin/ShowRessource";
+import DeleteRessourceView from "@/components/admin/DeleteRessource";
 
 export default {
   name: "AdminView",

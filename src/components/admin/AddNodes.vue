@@ -81,7 +81,6 @@ export default {
         impureBlock: 0,
       };
 
-      console.log(node.name)
       db.collection('nodes').doc(node.name).set(node).then(() => {
         this.node.name = null;
         this.node.pure = null;

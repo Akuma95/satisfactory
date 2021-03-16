@@ -1,17 +1,20 @@
 <template>
   <div id="app">
+
+    <v-app style="background-color: transparent">
+      <v-app-bar app color="transparent" flat>
+        <!-- -->
     <v-row>
-      <v-col cols="1" md="3"></v-col>
-      <v-col cols="9" md="6" id="nav">
-        <span v-if="setGame">
+      <v-col cols="3" md="3"></v-col>
+      <v-col cols="6" md="6" id="nav">
+        <span v-if="setGame" class="mt-2">
           <router-link to="/">Home</router-link> |
           <router-link to="/traffic">Verkehr</router-link> |
           <router-link to="/factory">Fabrik</router-link><span v-if="adminShow"> |
           <router-link to="/admin">Admin</router-link></span>
         </span>
       </v-col>
-      <v-col cols="1"></v-col>
-      <v-col cols="2" md="2">
+      <v-col cols="3" md="3">
         <br>
         <v-dialog
             transition="dialog-top-transition"
@@ -22,7 +25,7 @@
                 color="#F2C800"
                 v-bind="attrs"
                 v-on="on"
-            >Spieldaten</v-btn>
+            >Savegame</v-btn>
           </template>
           <template v-slot:default="dialog">
             <v-card>
@@ -30,25 +33,40 @@
                   color="amber"
                   dark
                   style="color: #111416; font-weight: bold;"
-              >Du kannst Einstellungen für dein Spiel treffen.</v-toolbar>
+              >Du kannst einer Datenbank joinen oder eine neue erstellen.</v-toolbar>
               <v-card-text>
                 <br>
                 <v-row>
-                  <v-col cols="12"><p>Der Name unter dem alles gespeichert wird: <b>{{spielstand?spielstand:'Kein Spielstand vorhanden'}}</b></p></v-col>
+                  <v-col cols="12"><p>Der aktuelle Name unter dem alles gespeichert wird: <b>{{spielstand?spielstand:'Kein Spielstand vorhanden'}}</b></p></v-col>
                 </v-row>
                 <v-row>
-                  <v-col cols="12"><v-text-field
+                  <v-col cols="12" md="6"><v-text-field
                         v-model="newSpielstand"
-                        label="Wie soll der Spielstand heißen?"
+                        label="Name des Savegames"
                     ></v-text-field></v-col>
+                  <v-col cols="12" md="6"><v-text-field
+                      v-model="newPassword"
+                      label="Passwort"
+                  ></v-text-field></v-col>
+                  <v-col cols="12" v-if="gameAssigned"><p class="errorMsg">
+                    Es tut mir leid, dieses Savegame besteht bereits.
+                  </p></v-col>
+                  <v-col cols="12" v-if="failPW"><p class="errorMsg">
+                    Es tut mir leid, aber das Password stimmt leider nicht.
+                  </p></v-col>
                 </v-row>
               </v-card-text>
               <v-card-actions class="justify-center">
                 <v-btn
                     outlined
-                    color="green darken-2"
+                    color="blue darken-2"
                     @click="setSpielstand"
-                >Speichern</v-btn>
+                >Neue Datenbank</v-btn>
+                <v-btn
+                    outlined
+                    color="green darken-2"
+                    @click="getFormSavegame"
+                >Datenbank joinen</v-btn>
               </v-card-actions>
             </v-card>
           </template>
@@ -57,13 +75,39 @@
     </v-row>
     <div id="">
     </div>
-    <v-app style="background-color: transparent">
-    <router-view />
+
+      </v-app-bar>
+      <v-main>
+        <v-container fluid>
+          <router-view />
+        </v-container>
+      </v-main>
+
+      <v-footer class="py-3" color="#dddddd">
+        <v-row>
+          <v-col
+              class="text-center"
+              cols="12"
+          >
+            <router-link to="/"><v-btn color="primary" class="mx-5 my-3" text rounded>Home</v-btn></router-link>
+            <router-link to="/services"><v-btn color="primary" class="mx-5 my-3" text rounded>Services</v-btn></router-link>
+            <router-link to="/feedback"><v-btn color="primary" class="mx-5 my-3" text rounded>Feedback</v-btn></router-link>
+          </v-col>
+          <v-col
+              class="text-center"
+              cols="12"
+          >
+            {{ new Date().getFullYear() }} — <strong>Paul Koplin</strong>
+          </v-col>
+        </v-row>
+      </v-footer>
     </v-app>
   </div>
 </template>
 
 <script>
+
+import {db} from "@/firebase/firebase";
 
 export default {
   data() {
@@ -71,42 +115,113 @@ export default {
       adminShow: false,
       setGame: true,
       spielstand: '',
+      password: '',
+      newPassword: '',
+      gameAssigned: false,
+      failPW: false,
       newSpielstand: '',
       dialog: false,
     };
   },
+  computed: {
+    allGames() {
+      return this.$store.getters.getAllGames;
+    },
+  },
   methods: {
     checkAdmin() {
-      if (localStorage.getItem('isAdmin') === undefined) {
-        localStorage.setItem('isAdmin', false);
+      if (localStorage.getItem('isAdmin') !== undefined) {
+        this.adminShow = localStorage.getItem('isAdmin')
       }
-      this.adminShow = localStorage.getItem('isAdmin')
     },
-    getSpielstand() {
-      this.spielstand = localStorage.getItem('spielstand');
+    getFormSavegame() {
+      this.gameAssigned = false;
+      this.failPW = false;
+      let spielstand = this.newSpielstand;
+      let password = this.newPassword;
+      this.allGames.forEach(game => {
+        if (spielstand === game.name) {
+          if (password === game.password) {
+            this.spielstand = spielstand
+            this.password = password
+            localStorage.setItem('spielstand', spielstand);
+            localStorage.setItem('password', password);
+            this.$store.dispatch("isSetGame");
+            this.$store.dispatch("setAllRessources");
+            this.$store.dispatch("setBasicRessources");
+            this.$store.dispatch("setAllNodes");
+            this.$store.dispatch("setBasicNodes");
+            this.$store.dispatch("setAllTraffic");
+            this.$store.dispatch("setAllTimetable");
+            this.$store.dispatch("setAllRessources");
+            this.$store.dispatch("setAllFactory");
+          } else {
+            localStorage.setItem('spielstand', '');
+            localStorage.setItem('password', '');
+            this.failPW = true;
+          }
+        }
+      })
+    },
+    getLocalSavegame() {
+      this.gameAssigned = false;
+      this.failPW = false;
+      let spielstand = localStorage.getItem('spielstand');
+      let password = localStorage.getItem('password');
+      this.allGames.forEach(game => {
+        if (spielstand === game.id) {
+          if (password === game.password) {
+            this.spielstand = spielstand
+            this.password = password
+            this.$store.dispatch("isSetGame");
+            this.$store.dispatch("setAllRessources");
+            this.$store.dispatch("setBasicRessources");
+            this.$store.dispatch("setAllNodes");
+            this.$store.dispatch("setBasicNodes");
+            this.$store.dispatch("setAllTraffic");
+            this.$store.dispatch("setAllTimetable");
+            this.$store.dispatch("setAllRessources");
+            this.$store.dispatch("setAllFactory");
+          }
+        }
+      })
     },
     setSpielstand() {
-      if (this.newSpielstand !== '' && this.newSpielstand !== ' ') {
-        localStorage.setItem('spielstand', this.newSpielstand);
-      }
-      this.newSpielstand = '';
-      location.reload()
+      this.gameAssigned = false;
+      this.failPW = false;
+      this.allGames.forEach(game => {
+        if (game.name === this.newSpielstand) {
+          localStorage.setItem('spielstand', '');
+          localStorage.setItem('password', '');
+          this.gameAssigned = true;
+        } else {
+          if (this.newSpielstand !== '' && this.newSpielstand !== ' ') {
+            localStorage.setItem('spielstand', this.newSpielstand);
+            localStorage.setItem('password', this.newPassword);
+            db.collection('login').doc(this.newSpielstand).set({password:this.newPassword, name:this.newSpielstand}).then(()=>{
+              this.$store.dispatch("isSetGame");
+              this.$store.dispatch("setAllRessources");
+              this.$store.dispatch("setBasicRessources");
+              this.$store.dispatch("setAllNodes");
+              this.$store.dispatch("setBasicNodes");
+              this.$store.dispatch("setAllTraffic");
+              this.$store.dispatch("setAllTimetable");
+              this.$store.dispatch("setAllRessources");
+              this.$store.dispatch("setAllFactory");
+              this.newSpielstand = '';
+              location.reload()
+            })
+          }
+        }
+      })
     }
   },
   created() {
     this.checkAdmin();
   },
   mounted() {
-    this.getSpielstand();
-    this.$store.dispatch("isSetGame");
-    this.$store.dispatch("setAllRessources");
-    this.$store.dispatch("setBasicRessources");
-    this.$store.dispatch("setAllNodes");
-    this.$store.dispatch("setBasicNodes");
-    this.$store.dispatch("setAllTraffic");
-    this.$store.dispatch("setAllTimetable");
-    this.$store.dispatch("setAllRessources");
-    this.$store.dispatch("setAllFactory");
+    this.$store.dispatch("setAllGames");
+    this.getLocalSavegame();
   },
 }
 </script>
@@ -146,10 +261,17 @@ h1 {
   color: #647179;
   text-decoration: none;
 }
+a {
+  text-decoration: none !important;
+}
 #nav a.router-link-exact-active {
   color: #F2C800;
 }
 .v-select {
   display: grid;
+}
+.errorMsg {
+  color: #a90000;
+  font-weight: bold;
 }
 </style>

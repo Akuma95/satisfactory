@@ -96,6 +96,7 @@
     <v-btn
         @click="save"
         color="#F2C800"
+        v-if="showBtn"
     >Speichern</v-btn>
 
   </div>
@@ -119,6 +120,7 @@ export default {
       errorSave: false,
       trafficItems: [],
       timetableItems: [],
+      showBtn: false,
       value: '1',
       timetable: {
         kind: {
@@ -157,8 +159,15 @@ export default {
   mounted() {
     this.setCombobox(this.allTimetable, this.timetableItems);
     this.setCombobox(this.allTraffic, this.trafficItems);
+    this.showBtnM();
   },
   methods: {
+    showBtnM() {
+      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
+        this.showBtn = true
+      }
+      this.showBtn = false
+    },
     async writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let timetable = {
@@ -224,7 +233,6 @@ export default {
       }
     },
     setCombobox(res, tar) {
-      console.log(res)
       res.forEach(obj => {
         let input = {
           text: obj.name,

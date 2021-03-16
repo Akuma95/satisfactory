@@ -101,8 +101,14 @@ export default {
   },
   methods: {
     async setStations() {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       this.stations = [];
-      await db.collection('traffic').doc(this.stationName).collection('stations').get().then(querySnapshot => {
+      await prepared.collection('traffic').doc(this.stationName).collection('stations').get().then(querySnapshot => {
         let getData = querySnapshot.docs.map(doc => doc.data());
         getData.forEach(e => {
           this.stations.push({
@@ -122,7 +128,6 @@ export default {
       })
     },
     setVehicle() {
-      console.log(this.allTimetable)
       this.allTimetable.forEach(e => {
         this.allVehicle.push({
           text: e.name,
@@ -130,8 +135,6 @@ export default {
         })
       })
     },
-
-    /** TODO: Die Farben der Punkte werden noch nicht richtig angezeigt*/
 
     setTimeline() {
       this.timetable = [];
@@ -149,17 +152,23 @@ export default {
             this.allStations.forEach(g => {
               if (g.name === f) {
                 g.stations.forEach(h => {
-                  freightIn = h.class === 'freightIn';
-                  freightOut = h.class === 'freightOut';
-                  freightInOut = freightIn === true && freightOut === true;
+                  if (!freightIn) {
+                    freightIn = h.class === 'freightIn';
+                  }
+                  if (!freightOut) {
+                    freightOut = h.class === 'freightOut';
+                  }
+                  freightInOut = freightIn && freightOut;
                 })
               }
             })
             if (freightIn) {
               body.class = 'freightIn';
-            } else if (freightOut) {
+            }
+            if (freightOut) {
               body.class = 'freightOut';
-            } else if (freightInOut) {
+            }
+            if (freightInOut) {
               body.class = 'freightInOut';
             }
             this.timetableDuration = e.duration;

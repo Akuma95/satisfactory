@@ -40,5 +40,32 @@ export default new Router({
       component: () =>
           import(/* webpackChunkName: "about" */ "./views/AdminView.vue"),
     },
+    {
+      path: "/services",
+      name: "services",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () =>
+          import(/* webpackChunkName: "about" */ "./views/ServicesView.vue"),
+    },
+    {
+      path: "/feedback",
+      name: "feedback",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () =>
+          import(/* webpackChunkName: "about" */ "./views/FeedbackView.vue"),
+    },
+    {
+      path: "/changelog",
+      name: "changelog",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () =>
+          import(/* webpackChunkName: "about" */ "./views/ChangelogView.vue"),
+    },
   ],
 });

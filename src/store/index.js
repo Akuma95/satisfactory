@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    allGames: [],
     allRessources: [],
     basicRessources: [],
     allNodes: [],
@@ -44,12 +45,25 @@ export default new Vuex.Store({
     setAllFactory(state, payload) {
       state.allFactory = payload;
     },
+    setAllGames(state, payload) {
+      state.allGames = payload;
+    },
   },
   actions: {
     async isSetGame(state) {
       if (localStorage.getItem('spielstand') !== null) {
         state.commit("isSetGame", true)
       }
+    },
+    async setAllGames(state) {
+      let res = []
+      await db.collection('login').get().then(querySnapshot => {
+        let data = querySnapshot.docs.map(doc => doc.data());
+        data.forEach(f => {
+          res.push(f);
+        });
+        state.commit("setAllGames", res)
+      })
     },
     async setAllRessources(state) {
       let prepared
@@ -104,24 +118,6 @@ export default new Vuex.Store({
         state.commit("setBasicNodes", res)
       })
     },
-    async setAllTraffic(state) {
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
-      let res = []
-      await prepared.collection('traffic').get().then(querySnapshot => {
-        let data = querySnapshot.docs.map(doc => doc.data());
-        data.forEach(f => {
-          res.push(f);
-        });
-        state.commit("setAllTraffic", res)
-      }).then(() => {
-        //state.dispatch("setAllStations");
-      })
-    },
     async setAllTimetable(state) {
       let prepared
       if (location.host !== 'localhost:8080') {
@@ -154,16 +150,40 @@ export default new Vuex.Store({
         state.commit("setAllFactory", res)
       })
     },
-    setAllStations(state) {
+    async setAllTraffic(state) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
+      let res = []
+      await prepared.collection('traffic').get().then(querySnapshot => {
+        let data = querySnapshot.docs.map(doc => doc.data());
+        data.forEach(f => {
+          res.push(f);
+        });
+        state.commit("setAllTraffic", res)
+      }).then(() => {
+        state.dispatch("setAllStations", res);
+      })
+    },
+    async setAllStations(state, payload) {
+      let prepared
+      if (location.host !== 'localhost:8080') {
+        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
+      } else {
+        prepared = db.collection('login').doc('TestSpiel');
+      }
       let res = [];
-      state.allTraffic.forEach(e => {
+      payload.forEach(e => {
         let main = {
           kind: e.kind,
           name: e.name,
           value: e.value,
           stations: [],
         }
-        db.collection('traffic').doc(e.name).collection('stations').get().then(querySnapshot => {
+        prepared.collection('traffic').doc(e.name).collection('stations').get().then(querySnapshot => {
           let getData = querySnapshot.docs.map(doc => doc.data());
           getData.forEach(f => {
             main.stations.push({
@@ -191,5 +211,6 @@ export default new Vuex.Store({
     getAllStations: state => state.allStations,
     getAllFactory: state => state.allFactory,
     getIsSetGame: state => state.setGame,
+    getAllGames: state => state.allGames,
   }
 })

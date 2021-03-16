@@ -39,10 +39,10 @@
 </template>
 
 <script>
-import TrainView from "@/views/traffic/TrainView";
-import AddRouteView from "@/views/traffic/AddRouteView.vue";
-import ShowFillDurationView from "@/views/traffic/ShowFillDurationView";
-import AddPlanView from "@/views/traffic/AddPlanView";
+import TrainView from "@/components/traffic/ShowTrainStation";
+import AddRouteView from "@/components/traffic/AddStation.vue";
+import ShowFillDurationView from "@/components/traffic/ShowFillDuration";
+import AddPlanView from "@/components/traffic/AddPlan";
 
 
 export default {

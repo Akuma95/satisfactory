@@ -139,6 +139,7 @@
     <v-btn
         @click="save"
         color="#F2C800"
+        v-if="showBtn"
     >Speichern</v-btn>
 
   </div>
@@ -160,6 +161,7 @@ export default {
   data() {
     return {
       errorSave: false,
+      showBtn: false,
       unFillItems: [
         {
           text: 'beladen',
@@ -216,6 +218,12 @@ export default {
     }
   },
   methods: {
+    showBtnM() {
+      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
+        this.showBtn = true
+      }
+      this.showBtn = false
+    },
     async writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let station = {
@@ -243,7 +251,7 @@ export default {
             isFluid: e.freight.value !== 'Platzhalter' ? e.isFluid : '',
             amount: e.freight.value !== 'Platzhalter' ? e.amount : {transport: '', available: '',}
           };
-          if(e.freight.value !== undefined) {
+          if(e.freight.value !== undefined && e.freight.value !== '') {
             prepared.collection('traffic').doc(station.name).collection("stations").doc(i + e.freight.value).set(freight)
             i++;
           }
@@ -329,6 +337,7 @@ export default {
   mounted() {
     this.setCombobox();
     this.setTraffic();
+    this.showBtnM();
   }
 };
 </script>
