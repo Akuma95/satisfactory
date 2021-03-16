@@ -139,7 +139,6 @@
     <v-btn
         @click="save"
         color="#F2C800"
-        v-if="showBtn"
     >Speichern</v-btn>
 
   </div>

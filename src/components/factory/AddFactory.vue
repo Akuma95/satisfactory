@@ -255,7 +255,6 @@
             @click="save"
             style="background-color: #F2C800"
             :disabled="factory.id===''"
-            v-if="showBtn"
         >Speichern</v-btn>
       </v-col>
       <v-col cols="1"></v-col>

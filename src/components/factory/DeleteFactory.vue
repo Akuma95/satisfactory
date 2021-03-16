@@ -27,7 +27,6 @@
             style="height: 56px; color: #ddd; width: 100%"
             color="#ad1010"
             :disabled="!disableBtn"
-            v-if="showBtn"
             @click="deleteFactory"
         >Löschen</v-btn>
       </v-col>
