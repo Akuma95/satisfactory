@@ -39,6 +39,19 @@
                 <v-row>
                   <v-col cols="12"><p>Der aktuelle Name unter dem alles gespeichert wird: <b>{{spielstand?spielstand:'Kein Spielstand vorhanden'}}</b></p></v-col>
                 </v-row>
+                <hr>
+                <br>
+                <v-row>
+                  <v-col cols="12">
+                    <p>
+                      Bitte gib einen Namen für den Spielstand und ein Passwort an, unter dem die <br>
+                      Datenbank laufen soll. Bachte dabei, dass Name und Passwort im <b>Klartext</b> <br>
+                      gespeichert werden, da <b>keine persönlichen Daten</b> von dir gespeichert werden.<br>
+                      Das Passwort hat lediglich dem Zweck, das niemand Fremdes sich ausversehen auf deine Datenbank zuschalten kann.
+                    </p>
+                  </v-col>
+                </v-row>
+                <hr>
                 <v-row>
                   <v-col cols="12" md="6"><v-text-field
                         v-model="newSpielstand"

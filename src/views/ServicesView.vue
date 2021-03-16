@@ -6,7 +6,7 @@
       <p>
         Firebase ist eine Entwicklungs-Plattform für mobile und Webanwendung. <br>
         Diese Plattform dient als Datenbank und zum Hosten der Website. <br>
-        Es handelt sich hierbei um ein Service der Google LLC.
+        Es handelt sich hierbei um einen Service der Google LLC.
       </p>
       <h3>Was wird in der Datenbank gespeichert?</h3>
       <p>
@@ -20,6 +20,8 @@
         </ul>
         <li>Spielstand<sup>1</sup> bezogen:</li>
         <ul>
+          <li>Namen des Spielstandes</li>
+          <li>Passwort zum Spielstand</li>
           <li>belegte Nodes</li>
           <li>benötigte Ressourcen</li>
           <li>verfügbare Ressourcen</li>
@@ -42,7 +44,7 @@
       </p>
       <h3>Was wird im localStorage gespeichert?</h3>
       <p>
-        Wir hinterlegen den Spielstandnamen im localstorage, damit du nicht bei jedem neuen Besuch den Namen eingeben musst und direkt starten kannst.
+        Wir hinterlegen den <b>Names des Spielstandes</b> und das <b>Passwort</b> im localstorage, damit du nicht bei jedem neuen Besuch den Namen eingeben musst und direkt starten kannst.
       </p>
     </div>
   </div>
