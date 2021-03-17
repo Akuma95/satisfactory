@@ -1,13 +1,25 @@
 <template>
   <div id="wrapper">
     <h2>Resourcenknoten</h2>
-    <v-data-table
-        :headers="headers"
-        :items="items"
-        :items-per-page="5"
-        class="elevation-1"
-        style="background-color: transparent"
-    ></v-data-table>
+    <v-card color="transparent" flat>
+      <v-card-title>
+        <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Suche"
+            single-line
+            hide-details
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+          :headers="headers"
+          :items="items"
+          :search="search"
+          :items-per-page="5"
+          class="elevation-1"
+          style="background-color: transparent"
+      ></v-data-table>
+    </v-card>
   </div>
 </template>
 
@@ -18,6 +30,7 @@ export default {
   name: "ShowNodesView",
   data() {
     return {
+      search: '',
       headers: [
         {
           text: 'Knoten',

@@ -1,14 +1,26 @@
 <template>
   <div id="wrapper">
     <h2>Verbrauch</h2>
-    <p>Die Werte sind pro Minute.</p>
-    <v-data-table
-        :headers="headers"
-        :items="storage"
-        :items-per-page="5"
-        class="elevation-1"
-        style="background-color: transparent"
-    ></v-data-table>
+    <p class="ma-0">Die Werte sind pro Minute.</p>
+    <v-card color="transparent" flat>
+      <v-card-title>
+        <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Suche"
+            single-line
+            hide-details
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+          :headers="headers"
+          :items="storage"
+          :search="search"
+          :items-per-page="5"
+          class="elevation-1"
+          style="background-color: transparent"
+      ></v-data-table>
+    </v-card>
   </div>
 </template>
 
@@ -19,6 +31,7 @@ export default {
   name: "ShowNodesView",
   data() {
     return {
+      search: '',
       headers: [
         {
           text: 'Ressourcen',

@@ -401,7 +401,9 @@ export default {
               }
             })
             if (save) {
-              prepared.collection('nodes').doc(e.name).collection('blocked').doc(fabric.name).set(blocked);
+              prepared.collection('nodes').doc(e.name).collection('blocked').doc(fabric.name).set(blocked).then(() => {
+                prepared.collection('nodes').doc(e.name).set({name: e.name});
+              })
             }
           })
         })

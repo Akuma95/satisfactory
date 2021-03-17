@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-6">
+  <div class="pa-6" id="wrapper" v-if="factory.name.includes(searchFactory)">
       <v-row>
         <v-col cols="2">
           <!--<v-btn color="green">Speichern</v-btn>-->
@@ -97,7 +97,8 @@ import {db} from "@/firebase/firebase";
 export default {
   name: "TrafficView",
   props: [
-      'factory'
+      'factory',
+      'searchFactory'
   ],
   data() {
     return {
