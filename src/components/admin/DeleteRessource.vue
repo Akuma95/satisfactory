@@ -56,7 +56,7 @@ export default {
     return {
       disableBtn: false,
       disableBtnAll: true,
-      selectedRessource: {},
+      selectedRessource: '',
       items: []
     };
   },
@@ -83,6 +83,7 @@ export default {
     },
 
     setCombobox() {
+      console.log(this.allRessources)
       this.allRessources.forEach(obj => {
         db.collection('ressources').doc(obj.name)
             .collection('alternative').get()

@@ -52,7 +52,7 @@
         <v-col cols="6">
           <v-combobox
               v-model="ressource.production.input1"
-              :items="input1"
+              :items="component"
               label="Input 1"
               filled
               attach
@@ -67,7 +67,7 @@
         <v-col cols="6">
           <v-combobox
               v-model="ressource.production.input2"
-              :items="input2"
+              :items="component"
               label="Input 2"
               filled
               attach
@@ -84,7 +84,7 @@
         <v-col cols="6">
           <v-combobox
               v-model="ressource.production.input3"
-              :items="input3"
+              :items="component"
               label="Input 3"
               filled
               attach
@@ -99,7 +99,7 @@
         <v-col cols="6">
           <v-combobox
               v-model="ressource.production.input4"
-              :items="input4"
+              :items="component"
               label="Input 4"
               filled
               attach
@@ -124,11 +124,6 @@ import {db} from "@/firebase/firebase";
 
 export default {
   name: "RessourceView",
-  watch: {
-    allRessources() {
-      this.setCombobox();
-    }
-  },
   data() {
     return {
       ressource: {
@@ -145,15 +140,16 @@ export default {
         },
       },
       component: [],
-      input1: [],
-      input2: [],
-      input3: [],
-      input4: [],
     };
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getAllRessources;
+      return this.$store.getters.getBasicRessources;
+    }
+  },
+  watch: {
+    allRessources() {
+      this.setCombobox();
     }
   },
   mounted() {
@@ -203,10 +199,6 @@ export default {
             value: obj.name,
           };
           this.component.push(input);
-          this.input1.push(input);
-          this.input2.push(input);
-          this.input3.push(input);
-          this.input4.push(input);
       });
     }
   },

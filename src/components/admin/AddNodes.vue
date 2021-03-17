@@ -45,11 +45,6 @@ import {db} from '@/firebase/firebase'
 
 export default {
   name: "RessourceView",
-  watch: {
-    allNodes() {
-      this.setCombobox()
-    }
-  },
   data() {
     return {
       nodes: [],
@@ -63,7 +58,12 @@ export default {
   },
   computed: {
     allNodes() {
-      return this.$store.getters.getAllNodes;
+      return this.$store.getters.getBasicNodes;
+    }
+  },
+  watch: {
+    allNodes() {
+      this.setCombobox()
     }
   },
   mounted() {
@@ -89,9 +89,7 @@ export default {
       })
     },
     setCombobox() {
-      let allNodes = this.allNodes;
-
-      allNodes.forEach(obj => {
+      this.allNodes.forEach(obj => {
         let input = {
           text: obj.name,
           value: obj.name,
