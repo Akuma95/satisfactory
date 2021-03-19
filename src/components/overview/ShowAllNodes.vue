@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     setNodeTable() {
-      console.log(this.allNodes)
       let prepared
       if (location.host !== 'localhost:8080') {
         prepared = db.collection('login').doc(localStorage.getItem('spielstand'));

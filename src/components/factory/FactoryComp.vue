@@ -39,7 +39,7 @@
           <h1>{{ factory.name }}</h1>
         </v-col>
         <v-col cols="2">
-          <p><b>Stromkosten:</b> {{factory.power.usage - factory.power.production}}</p>
+          <p><!--<two-field name="Stromkosten" :need="factory.power.usage" :produce="factory.power.production" color="blue" @changeValue="changePower"/>--><b>Stromkosten:</b> {{factory.power.usage - factory.power.production}}</p>
         </v-col>
         <v-col cols="2"></v-col>
       </v-row>
@@ -62,7 +62,7 @@
             <v-col cols="12" md="2">{{node.countNodes}}</v-col>
             <v-col cols="3"></v-col>
             <v-col cols="12">{{node.station}}</v-col><br>
-            <v-col cols="12"><v-divider style="background-color: #F2C800"></v-divider></v-col>
+            <v-col cols="12"><v-divider style="background-color: #caa70f"></v-divider></v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="4">
@@ -93,15 +93,24 @@
 
 <script>
 import {db} from "@/firebase/firebase";
+//import MultiField from "@/components/factory/popup/MultiField";
+//import SingleField from "@/components/factory/popup/SingleField";
+//import TwoField from "@/components/factory/popup/TwoField";
 
 export default {
   name: "TrafficView",
+  components: {
+    //MultiField,
+    //SingleField,
+    //TwoField
+  },
   props: [
       'factory',
       'searchFactory'
   ],
   data() {
     return {
+      sheet: false,
     };
   },
   methods: {
@@ -114,6 +123,11 @@ export default {
         prepared = db.collection('login').doc('TestSpiel');
       }
       prepared.collection('factory').doc(this.factory.name).delete();
+    },
+    changePower(newValue){
+      console.log(newValue)
+      this.factory.power.usage = newValue.usage;
+      this.factory.power.production = newValue.production;
     }
   }
 };

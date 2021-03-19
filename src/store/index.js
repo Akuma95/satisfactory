@@ -103,7 +103,6 @@ export default new Vuex.Store({
       await prepared.collection('nodes').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
-          console.log(f)
           res.push(f);
         });
         state.commit("setAllNodes", res)
