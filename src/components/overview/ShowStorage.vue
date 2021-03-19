@@ -21,6 +21,11 @@
           style="background-color: transparent"
       ></v-data-table>
     </v-card>
+    <ul>
+      <li v-for="value in values" :key="value.name">
+        <span :class="{ 'warning' : value.liquid }">{{ value.name }}</span>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -43,12 +48,17 @@ export default {
         { text: 'Produziert', value: 'produce' },
         { text: 'Bilanzen', value: 'balance' },
       ],
+      values: [],
       storage: [],
     };
   },
   watch: {
     allRessources() {
       this.setTable();
+    },
+
+    values: function(newVal, oldVal) {
+      console.log('executed', newVal, oldVal);
     }
   },
   computed: {
@@ -57,7 +67,10 @@ export default {
     }
   },
   mounted() {
-    this.setTable();
+    //this.setTable();
+    db.collection('ressources').onSnapshot({
+      next: (d) => this.values = d.docs.map(value => value.data())
+    });
   },
   methods: {
     async getNeeded(name) {
@@ -119,5 +132,9 @@ export default {
   width: 90%;
   margin: auto;
   padding: 10px 20px;
+}
+
+.warning {
+  color: red;
 }
 </style>

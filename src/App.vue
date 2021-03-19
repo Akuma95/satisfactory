@@ -156,7 +156,32 @@ export default {
       this.failPW = false;
       let spielstand = this.newSpielstand.toLowerCase();
       let password = this.newPassword;
-      this.allGames.forEach(game => {
+
+      const match = this.allGames.find(game => game.name === spielstand);
+
+      if (match && password === match.password) {
+        console.log('MATCH FOUND + PASSWORD SUCCEDED');
+        this.spielstand = spielstand
+        this.password = password
+        localStorage.setItem('spielstand', spielstand);
+        localStorage.setItem('password', password);
+        this.$store.dispatch("isSetGame");
+        this.$store.dispatch("setAllRessources");
+        this.$store.dispatch("setBasicRessources");
+        this.$store.dispatch("setAllNodes");
+        this.$store.dispatch("setBasicNodes");
+        this.$store.dispatch("setAllTraffic");
+        this.$store.dispatch("setAllTimetable");
+        this.$store.dispatch("setAllRessources");
+        this.$store.dispatch("setAllFactory");
+      } else {
+        localStorage.setItem('spielstand', '');
+        localStorage.setItem('password', '');
+        this.failPW = true;
+      }
+
+      /*this.allGames.forEach((game, id) => {
+        console.log(`GAME ${id}`, game);
         if (spielstand === game.name) {
           if (password === game.password) {
             this.spielstand = spielstand
@@ -178,7 +203,7 @@ export default {
             this.failPW = true;
           }
         }
-      })
+      })*/
     },
     getLocalSavegame() {
       this.gameAssigned = false;

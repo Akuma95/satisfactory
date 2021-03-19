@@ -70,17 +70,14 @@ export default new Vuex.Store({
       if (location.host !== 'localhost:8080') {
         prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
       } else {
-        //console.log('Test Datenbank')
+        console.log('Test Datenbank')
         prepared = db.collection('login').doc('TestSpiel');
+        console.log(prepared);
       }
-      let res = []
-      await prepared.collection('ressources').get().then(querySnapshot => {
-        let data = querySnapshot.docs.map(doc => doc.data());
-        data.forEach(f => {
-          res.push(f);
-        });
-        state.commit("setAllRessources", res)
-      })
+      await prepared.collection('ressources').get().then(querySnapshot =>
+        state.commit("setAllRessources", querySnapshot.docs.map(doc => doc.data()))
+
+      )
     },
     async setBasicRessources(state) {
       let res = []
@@ -103,7 +100,6 @@ export default new Vuex.Store({
       await prepared.collection('nodes').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
         data.forEach(f => {
-          console.log(f)
           res.push(f);
         });
         state.commit("setAllNodes", res)

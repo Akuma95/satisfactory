@@ -221,13 +221,8 @@ export default {
     }
   },
   methods: {
-    showBtnM() {
-      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
-        this.showBtn = true
-      }
-      this.showBtn = false
-    },
     async writeDB() {
+      console.log(localStorage.getItem('spielstand'))
       //Ein Station Objekt für Firestore erstellen
       let station = {
         name: this.traffic.stationName,
