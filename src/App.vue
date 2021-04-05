@@ -125,7 +125,6 @@ export default {
   data() {
     return {
       adminShow: false,
-      setGame: true,
       spielstand: '',
       password: '',
       newPassword: '',
@@ -138,6 +137,9 @@ export default {
   computed: {
     allGames() {
       return this.$store.getters.getAllGames;
+    },
+    setGame() {
+      return this.$store.getters.getIsSetGame;
     },
   },
   watch: {
@@ -195,8 +197,8 @@ export default {
             this.$store.dispatch("setBasicNodes");
             this.$store.dispatch("setAllTraffic");
             this.$store.dispatch("setAllTimetable");
-            this.$store.dispatch("setAllRessources");
             this.$store.dispatch("setAllFactory");
+            this.$store.commit("setStorage");
           }
         }
       })
@@ -215,17 +217,17 @@ export default {
             localStorage.setItem('password', this.newPassword);
             db.collection('login').doc(this.newSpielstand.toLowerCase()).set({password:this.newPassword, name:this.newSpielstand.toLowerCase()}).then(()=>{
               this.$store.dispatch("isSetGame");
+              this.$store.dispatch("setAllFactory");
               this.$store.dispatch("setAllRessources");
               this.$store.dispatch("setBasicRessources");
               this.$store.dispatch("setAllNodes");
               this.$store.dispatch("setBasicNodes");
               this.$store.dispatch("setAllTraffic");
               this.$store.dispatch("setAllTimetable");
-              this.$store.dispatch("setAllRessources");
-              this.$store.dispatch("setAllFactory");
+              this.$store.commit("setStorage");
               this.newSpielstand = '';
               this.newPassword = '';
-              location.reload()
+              this.dialog = !this.dialog;
             })
           }
         }

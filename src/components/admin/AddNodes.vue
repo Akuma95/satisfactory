@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     allNodes() {
-      return this.$store.getters.getBasicNodes;
+      return this.$store.state.node.basicNodes;
     }
   },
   watch: {
@@ -76,9 +76,6 @@ export default {
         pure: this.node.pure,
         normal: this.node.normal,
         impure: this.node.impure,
-        pureBlock: 0,
-        normalBlock: 0,
-        impureBlock: 0,
       };
 
       db.collection('nodes').doc(node.name).set(node).then(() => {

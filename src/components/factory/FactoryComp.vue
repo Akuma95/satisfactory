@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import {db} from "@/firebase/firebase";
+import {getPrepared} from "@/store/function";
 
 export default {
   name: "TrafficView",
@@ -102,17 +102,13 @@ export default {
   ],
   data() {
     return {
+      sheet: false,
     };
   },
   methods: {
     deleteFactory() {
       //Den Pfad erstellen zur DB.
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared = getPrepared()
       prepared.collection('factory').doc(this.factory.name).delete();
     }
   }

@@ -153,24 +153,17 @@ export default {
   },
   computed: {
     allTraffic() {
-      return this.$store.getters.getAllTraffic;
+      return this.$store.state.traffic.allTraffic;
     },
     allTimetable() {
-      return this.$store.getters.getAllTimetable;
+      return this.$store.state.traffic.allTimetable;
     },
   },
   mounted() {
     this.setCombobox(this.allTimetable, this.timetableItems);
     this.setCombobox(this.allTraffic, this.trafficItems);
-    this.showBtnM();
   },
   methods: {
-    showBtnM() {
-      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
-        this.showBtn = true
-      }
-      this.showBtn = false
-    },
     async writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let timetable = {
@@ -203,22 +196,7 @@ export default {
       //in DB schreiben - ende
     },
     save() {
-      if (this.timetable.name === '') {
-        this.errorSave = true;
-      } else {
-        if (this.timetableItems.length > 0) {
-        this.timetableItems.forEach(e => {
-          if (e.value === this.timetable.name) {
-            this.errorSave = true;
-          } else {
-            this.writeDB().then(()=>{location.reload()});
-            return false;
-          }
-        })
-        } else {
-          this.writeDB().then(()=>{location.reload()});
-        }
-      }
+      this.timetable.name === '' ? this.errorSave = true : this.writeDB();
     },
 
     resetTraffic() {

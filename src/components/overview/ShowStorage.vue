@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import {db} from "@/firebase/firebase";
+import {getPrepared} from "@/store/function";
 
 export default {
   name: "ShowNodesView",
@@ -43,30 +43,26 @@ export default {
         { text: 'Produziert', value: 'produce' },
         { text: 'Bilanzen', value: 'balance' },
       ],
+      values: [],
       storage: [],
     };
   },
   watch: {
     allRessources() {
       this.setTable();
-    }
+    },
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getBasicRessources;
+      return this.$store.state.res.basicRessources;
     }
   },
   mounted() {
-    this.setTable();
+    //this.setTable();
   },
   methods: {
     async getNeeded(name) {
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared = getPrepared();
       let needed = 0;
       await prepared.collection('ressources').doc(name).collection('need').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
@@ -77,12 +73,7 @@ export default {
       return needed;
     },
     async getProduce(name) {
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared = getPrepared();
       let produce = 0;
       await prepared.collection('ressources').doc(name).collection('produce').get().then(querySnapshot => {
         let data = querySnapshot.docs.map(doc => doc.data());
@@ -119,5 +110,9 @@ export default {
   width: 90%;
   margin: auto;
   padding: 10px 20px;
+}
+
+.warning {
+  color: red;
 }
 </style>

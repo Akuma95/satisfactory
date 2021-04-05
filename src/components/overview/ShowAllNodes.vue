@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {db} from "@/firebase/firebase";
+import {getPrepared} from "@/store/function";
 
 export default {
   name: "ShowNodesView",
@@ -52,27 +52,21 @@ export default {
     basicNodes() {
       this.setNodeTable();
     },
+    allNodes() {
+      this.setNodeTable();
+    },
   },
   computed: {
     allNodes() {
-      return this.$store.getters.getAllNodes;
+      return this.$store.state.node.allNodes;
     },
     basicNodes() {
-      return this.$store.getters.getBasicNodes;
+      return this.$store.state.node.basicNodes;
     },
-  },
-  mounted() {
-    this.setNodeTable();
   },
   methods: {
     setNodeTable() {
-      console.log(this.allNodes)
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared = getPrepared();
 
       this.basicNodes.forEach(e => {
         let node = {

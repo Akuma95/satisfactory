@@ -144,7 +144,7 @@ export default {
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getBasicRessources;
+      return this.$store.state.res.basicRessources;
     }
   },
   watch: {

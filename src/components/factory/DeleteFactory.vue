@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase/firebase'
+import {getPrepared} from "@/store/function";
 
 export default {
   name: "DeleteFactoryView",
@@ -73,22 +73,10 @@ export default {
   },
   mounted() {
     this.setCombobox();
-    this.showBtnM();
   },
   methods: {
-    showBtnM() {
-      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
-        this.showBtn = true
-      }
-      this.showBtn = false
-    },
     deleteFactory() {
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared =  getPrepared()
       this.allRessources.forEach(e => {
         prepared.collection('ressources').doc(e.id).collection('need').doc(this.selctedFactory.value).delete();
         prepared.collection('ressources').doc(e.id).collection('produce').doc(this.selctedFactory.value).delete();
@@ -103,7 +91,6 @@ export default {
         this.selctedFactory = '';
         this.disableBtn = false;
         this.setCombobox();
-        location.reload()
       });
     },
     changeSelctedFactory() {

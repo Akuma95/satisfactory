@@ -41,7 +41,7 @@
                 <p>Bahnhof "{{ stationName }}"</p>
               </li>
               <li v-for="station in stations" :key="station.id" :class="station.class !== '' ? station.class : 'freightBlock'">
-                <p v-if="station.class!='freightBlock'"> {{station.freight}} <br> {{station.amount}} || <span :class="{'freightBlock': !station.amountMax}">{{station.max}}</span></p>
+                <p v-if="station.class!=='freightBlock'"> {{station.freight}} <br> {{station.amount}} || <span :class="{'freightBlock': !station.amountMax}">{{station.max}}</span></p>
                 <p v-else :class="station.amountMax"> {{station.freight}} <br> {{station.amount}} || <span :class="station.amountMax">{{station.max}}</span></p>
               </li>
             </ul>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase/firebase'
+import {getPrepared} from "@/store/function";
 
 export default {
   name: "AdminView",
@@ -86,13 +86,13 @@ export default {
   },
   computed: {
     allTraffic() {
-      return this.$store.getters.getAllTraffic;
+      return this.$store.state.traffic.allTraffic;
     },
     allTimetable() {
-      return this.$store.getters.getAllTimetable;
+      return this.$store.state.traffic.allTimetable;
     },
     allStations() {
-      return this.$store.getters.getAllStations;
+      return this.$store.state.traffic.allStations;
     },
   },
   mounted() {
@@ -101,12 +101,7 @@ export default {
   },
   methods: {
     async setStations() {
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared = getPrepared();
       this.stations = [];
       await prepared.collection('traffic').doc(this.stationName).collection('stations').get().then(querySnapshot => {
         let getData = querySnapshot.docs.map(doc => doc.data());

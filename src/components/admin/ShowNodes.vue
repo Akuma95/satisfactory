@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     allNodes() {
-      return this.$store.getters.getBasicNodes;
+      return this.$store.state.node.basicNodes;
     }
   },
   methods: {

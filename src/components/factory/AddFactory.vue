@@ -264,6 +264,7 @@
 
 <script>
 import {db} from "@/firebase/firebase";
+import {getPrepared} from "@/store/function";
 
 export default {
   name: "RessourceView",
@@ -328,28 +329,21 @@ export default {
   },
   computed: {
     allNodes() {
-      return this.$store.getters.getBasicNodes;
+      return this.$store.state.node.basicNodes;
     },
     allTraffic() {
-      return this.$store.getters.getAllTraffic;
+      return this.$store.state.traffic.allTraffic;
     },
     allRessources() {
-      return this.$store.getters.getBasicRessources;
+      return this.$store.state.res.basicRessources;
     },
   },
   mounted() {
     this.setCombobox(this.allNodes, this.nodeItems)
     this.setCombobox(this.allTraffic, this.trafficItems)
     this.setCombobox(this.allRessources, this.ressourceItems)
-    this.showBtnM();
   },
   methods: {
-    showBtnM() {
-      if (localStorage.getItem('spielstand')!==''||localStorage.getItem('spielstand')!==undefined) {
-        this.showBtn = true
-      }
-      this.showBtn = false
-    },
     writeDB() {
       //Ein Station Objekt für Firestore erstellen
       let fabric = {
@@ -367,12 +361,7 @@ export default {
         output: this.factory.output
       };
       //Den Pfad erstellen zur DB.
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared = getPrepared()
       let pathFactory = prepared.collection('factory').doc(fabric.name)
       let pathRessource = prepared.collection('ressources')
 
@@ -420,7 +409,6 @@ export default {
           }
         })
         // TODO: Fehlermeldung "Cannot read property of 'name'
-        location.reload()
         this.factory = {
           id: '',
           powerUsage: '',

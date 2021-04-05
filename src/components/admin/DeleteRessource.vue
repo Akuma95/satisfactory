@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getBasicRessources;
+      return this.$store.state.res.basicRessources;
     }
   },
   mounted() {
@@ -75,7 +75,6 @@ export default {
           path :
           path.collection('alternative').doc(this.selectedRessource.value);
       path.delete();
-      location.reload()
     },
 
     changeSelctedRessource() {
@@ -83,7 +82,6 @@ export default {
     },
 
     setCombobox() {
-      console.log(this.allRessources)
       this.allRessources.forEach(obj => {
         db.collection('ressources').doc(obj.name)
             .collection('alternative').get()

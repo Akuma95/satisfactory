@@ -145,16 +145,16 @@
 </template>
 
 <script>
-import {db} from "@/firebase/firebase";
+import {getPrepared} from "@/store/function";
 
 export default {
-  name: "AddRouteView",
+  name: "AddStationView",
   watch: {
     allRessources() {
-      this.setCombobox();
+      this.setCombobox(this.allRessources, this.ressourceItems);
     },
     allTraffic() {
-      this.setTraffic();
+      this.setCombobox(this.allTraffic(), this.trafficItems);
     },
   },
   data() {
@@ -214,10 +214,10 @@ export default {
   },
   computed: {
     allRessources() {
-      return this.$store.getters.getBasicRessources;
+      return this.$store.state.res.basicRessources;
     },
     allTraffic() {
-      return this.$store.getters.getAllTraffic;
+      return this.$store.state.traffic.allTraffic;
     }
   },
   methods: {
@@ -236,12 +236,7 @@ export default {
         kind: this.traffic.stationKind.value,
       };
       //Den Pfad erstellen zur DB.
-      let prepared
-      if (location.host !== 'localhost:8080') {
-        prepared = db.collection('login').doc(localStorage.getItem('spielstand'));
-      } else {
-        prepared = db.collection('login').doc('TestSpiel');
-      }
+      let prepared = getPrepared()
       let pathBasic = prepared.collection('traffic').doc(station.name)
 
       //Das erstellte Objekt abspeichern und und die Werte des Formulars reseten.
@@ -264,26 +259,8 @@ export default {
     },
     save() {
       let stationName = this.traffic.stationName
-      if (stationName === '') {
-        this.errorSave = true;
-      } else {
-        if (this.trafficItems.length > 0) {
-          this.trafficItems.forEach(e => {
-            if (e.value === stationName) {
-              this.errorSave = true;
-            } else {
-              this.writeDB().then(()=>{location.reload()});
-              return false;
-            }
-          })
-        } else {
-          this.writeDB().then(()=>{location.reload()});
-        }
-
-      }
-      //Error Check - ende && Funktion Save - Ende
+      stationName === '' ? this.errorSave = true : this.writeDB()
     },
-
     resetTraffic() {
       this.traffic.stationValue = 1
       this.traffic.stationFreight = [{
@@ -314,33 +291,23 @@ export default {
         this.traffic.stationFreight.pop();
       }
     },
-    setCombobox() {
-      this.allRessources.forEach(obj => {
+    setCombobox(src, target) {
+      src.forEach(obj => {
         let input = {
           text: obj.name,
           value: obj.name,
         };
-        this.ressourceItems.push(input);
+        target.push(input);
       });
-      this.ressourceItems.push({
+      target.push({
         text: 'Platzhalter',
         value: 'Platzhalter',
       });
     },
-    setTraffic() {
-      this.allTraffic.forEach(obj => {
-        let input = {
-          text: obj.name,
-          value: obj.name,
-        };
-        this.trafficItems.push(input);
-      });
-    }
   },
   mounted() {
-    this.setCombobox();
-    this.setTraffic();
-    this.showBtnM();
+    this.setCombobox(this.allRessources, this.ressourceItems);
+    this.setCombobox(this.allTraffic, this.trafficItems);
   }
 };
 </script>
