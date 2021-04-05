@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Satisfactory Planungstool</h1>
+    <h1 style="color: #F2C800;">Satisfactory Planungstool</h1>
     <span v-if="setGame">
       <br>
       <v-row>
