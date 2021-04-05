@@ -5,7 +5,9 @@
       <v-app-bar app color="transparent" flat>
         <!-- -->
     <v-row>
-      <v-col cols="3" md="3"></v-col>
+      <v-col cols="3" md="3">
+        <p v-if="spielstand!=''" style="margin-top: 20px; color: #F2C800;"><b><u>Spielstand:</u> </b> {{ spielstand }}</p>
+      </v-col>
       <v-col cols="6" md="6" id="nav">
         <span v-if="setGame" class="mt-2" style="color: #F2C800">
           <router-link to="/">Home</router-link> |
@@ -187,9 +189,13 @@ export default {
       this.failPW = false;
       let spielstand = localStorage.getItem('spielstand');
       let password = localStorage.getItem('password');
+      console.log("Local", spielstand, password)
       this.allGames.forEach(game => {
+        console.log("Game", game.name)
         if (spielstand === game.name) {
+          console.log("Game", game.password)
           if (password === game.password) {
+            this.spielstand = spielstand;
             this.$store.dispatch("isSetGame");
             this.$store.dispatch("setAllRessources");
             this.$store.dispatch("setBasicRessources");
