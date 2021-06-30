@@ -97,9 +97,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: auto;

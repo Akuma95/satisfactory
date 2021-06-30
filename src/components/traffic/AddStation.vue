@@ -35,10 +35,9 @@
             <v-col cols="5" class="mt-4">Anzahl der Plattform</v-col>
             <v-col cols="2" class="mt-4">
               <v-btn
-                  class="mx-2"
+                  class="mx-2 btn-tracker"
                   icon
                   small
-                  color="#333"
                   @click="removeFrieght"
               >
                 <v-icon dark>
@@ -49,10 +48,9 @@
             <v-col cols="2" class="mt-4">{{ traffic.stationValue }}</v-col>
             <v-col cols="2" class="mt-4">
               <v-btn
-                  class="mx-2"
+                  class="mx-2 btn-tracker"
                   icon
                   small
-                  color="#333"
                   :disabled="traffic.stationKind.value !== 'train'"
                   @click="addFrieght"
               >
@@ -138,7 +136,7 @@
 
     <v-btn
         @click="save"
-        color="#F2C800"
+        class="btn-brand"
     >Speichern</v-btn>
 
   </div>
@@ -312,9 +310,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: auto;
@@ -322,12 +322,12 @@ export default {
 }
 
 .satis-error {
-  color: #c60000;
+  color: $warn;
   font-weight: bold;
 }
 
 hr {
-  background-color: #F2C800;
+  background-color: $brand;
   border-width: thin;
 }
 </style>

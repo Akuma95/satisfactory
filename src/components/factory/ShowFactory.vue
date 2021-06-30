@@ -42,16 +42,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
   border-radius: 20px;
-  background-color: #dddddd;
+  background-color: $background-box;
   width: 92%;
   margin: auto;
   padding: 10px 20px;
 }
 .rowSearch {
-  background-color: #dddddd;
+  background-color: $background-box;
   width: 92%;
   margin: auto;
   border-radius: 5px;

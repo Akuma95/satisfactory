@@ -35,7 +35,7 @@
       </v-col>
     </v-row>
 
-    <v-btn @click="save" color="#F2C800">Speichern</v-btn>
+    <v-btn @click="save" class="btn-brand">Speichern</v-btn>
 
   </div>
 </template>
@@ -98,9 +98,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: auto;

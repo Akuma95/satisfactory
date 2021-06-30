@@ -2,14 +2,14 @@
   <div id="app">
 
     <v-app style="background-color: transparent">
-      <v-app-bar app color="transparent" flat>
+      <v-app-bar app flat height="85px">
         <!-- -->
     <v-row>
       <v-col cols="3" md="3">
-        <p v-if="spielstand!=''" style="margin-top: 20px; color: #F2C800;"><b><u>Spielstand:</u> </b> {{ spielstand }}</p>
+        <p v-if="spielstand!=''" class="gametitle"><b><u>Spielstand:</u></b> {{ spielstand }}</p>
       </v-col>
       <v-col cols="6" md="6" id="nav">
-        <span v-if="setGame" class="mt-2" style="color: #F2C800">
+        <span v-if="setGame" class="mt-2 routerLink">
           <router-link to="/">Home</router-link> |
           <router-link to="/traffic">Verkehr</router-link> |
           <router-link to="/factory">Fabrik</router-link><span v-if="adminShow"> |
@@ -17,14 +17,14 @@
         </span>
       </v-col>
       <v-col cols="3" md="3">
-        <br>
+
         <v-dialog
             transition="dialog-top-transition"
             max-width="600"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                color="#F2C800"
+                class="btn-brand ma-t-10"
                 v-bind="attrs"
                 v-on="on"
             >Savegame</v-btn>
@@ -32,9 +32,8 @@
           <template v-slot:default="dialog">
             <v-card>
               <v-toolbar
-                  color="amber"
                   dark
-                  style="color: #111416; font-weight: bold;"
+                  class="toolbarPopUp"
               >Du kannst einer Datenbank joinen oder eine neue erstellen.</v-toolbar>
               <v-card-text>
                 <br>
@@ -74,12 +73,12 @@
               <v-card-actions class="justify-center">
                 <v-btn
                     outlined
-                    color="blue darken-2"
+                    class="btn-new"
                     @click="setSpielstand"
                 >Neue Datenbank</v-btn>
                 <v-btn
                     outlined
-                    color="green darken-2"
+                    class="btn-join"
                     @click="getFormSavegame"
                 >Datenbank joinen</v-btn>
               </v-card-actions>
@@ -98,15 +97,15 @@
         </v-container>
       </v-main>
 
-      <v-footer class="py-3" color="#dddddd">
+      <v-footer class="py-3 footer-box">
         <v-row>
           <v-col
               class="text-center"
               cols="12"
           >
-            <router-link to="/"><v-btn color="primary" class="mx-5 my-3" text rounded>Home</v-btn></router-link>
-            <router-link to="/services"><v-btn color="primary" class="mx-5 my-3" text rounded>Services</v-btn></router-link>
-            <router-link to="/feedback"><v-btn color="primary" class="mx-5 my-3" text rounded>Feedback</v-btn></router-link>
+            <router-link to="/"><v-btn class="mx-5 my-3" text rounded>Home</v-btn></router-link>
+            <router-link to="/services"><v-btn class="mx-5 my-3" text rounded>Services</v-btn></router-link>
+            <router-link to="/feedback"><v-btn class="mx-5 my-3" text rounded>Feedback</v-btn></router-link>
           </v-col>
           <v-col
               class="text-center"
@@ -189,11 +188,8 @@ export default {
       this.failPW = false;
       let spielstand = localStorage.getItem('spielstand');
       let password = localStorage.getItem('password');
-      console.log("Local", spielstand, password)
       this.allGames.forEach(game => {
-        console.log("Game", game.name)
         if (spielstand === game.name) {
-          console.log("Game", game.password)
           if (password === game.password) {
             this.spielstand = spielstand;
             this.$store.dispatch("isSetGame");
@@ -250,52 +246,152 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "assets/style/variables.scss";
+
 body, html {
   height: 100%;
-  background-color: #202125;
+  background-color: $background-app;
 }
 
 h1 {
   font-size: 1.7rem;
 }
+
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: $global-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: $font-color;
   height: 100%;
 }
+
+header {
+  background-color: $font-color !important;
+  border-radius: 0 0 30px 30px !important;
+}
+
+.ma-t-10 {
+  margin: 12px;
+}
+
 #nav {
   padding: 30px;
-  background-color: #111416;
+  background-color: $accent;
   width: 40%;
   margin: 0 auto 20px;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
-}
-@media (max-width: 600px) {
-  #nav {
-    width: 70%;
+
+  @media (max-width: 600px) {
+      width: 70%;
+  }
+
+  a {
+    font-weight: bold;
+    color: $link-color;
+    text-decoration: none;
+    margin: 0 5%;
+
+    &.router-link-exact-active {
+      color: $brand;
+    }
   }
 }
-#nav a {
+
+.footer-box {
+  background-color: $background-box !important;
+
+  a {
+    text-decoration: none;
+
+    .v-btn {
+      font-weight: bold !important;
+      color: $btn-new ;
+    }
+  }
+}
+
+.fontLight {
+  color: $font-color-light;
+}
+
+.btn {
+  &-delete {
+    background-color: $warn !important;
+    color: $background-box !important;
+    height: 46px !important;
+    width: 100%;
+  }
+
+  &-brand {
+    background-color: $brand !important;
+  }
+
+  &-tracker {
+    color: $accent !important;
+  }
+
+  &-new {
+    color: $btn-new !important;
+  }
+
+  &-join {
+    color: $btn-join !important;
+  }
+
+  &-discord {
+    background-color: $discord !important;
+  }
+
+  &-telegram {
+    background-color: $telegram !important;
+  }
+}
+
+.divider {
+  &-brand {
+    background-color: $brand;
+  }
+
+  &-one {
+    background-color: $border1;
+  }
+
+  &-two {
+    background-color: $border2;
+  }
+
+  &-three {
+    background-color: $border3;
+  }
+}
+
+.background-black {
+  background-color: $accent;
+}
+
+.toolbarPopUp {
+  color: $accent !important;
+  background-color: $brand !important;
   font-weight: bold;
-  color: #647179;
-  text-decoration: none;
 }
-a {
-  text-decoration: none !important;
+
+.gametitle {
+  margin-top: 18px;
+  color: $brand;
 }
-#nav a.router-link-exact-active {
-  color: #F2C800;
+
+.routerLink {
+  color: $brand;
 }
+
 .v-select {
   display: grid;
 }
 .errorMsg {
-  color: #a90000;
+  color: $warn;
   font-weight: bold;
 }
 </style>

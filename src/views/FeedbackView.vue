@@ -10,8 +10,7 @@
       <v-tooltip left>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-              class="mx-4 white--text"
-              color="#7289da"
+              class="mx-4 white--text btn-discord"
               v-bind="attrs"
               v-on="on"
               fab
@@ -28,8 +27,7 @@
       <v-tooltip right>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-              class="mx-4 white--text"
-              color="#0088cc"
+              class="mx-4 white--text btn-telegram"
               v-bind="attrs"
               v-on="on"
               rounded
@@ -171,21 +169,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: 20px auto;
   padding: 10px 20px;
 }
 .errorMsg {
-  color: #a90000;
+  color: $warn;
   font-weight: bold;
 }
 h1 {
   font-size: 1.7rem;
-  color: #F2C800;
+  color: $brand;
 }
 h2 {
   color: #647179;

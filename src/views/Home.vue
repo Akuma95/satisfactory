@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 style="color: #F2C800;">Satisfactory Planungstool</h1>
+    <h1>Satisfactory Planungstool</h1>
     <span v-if="setGame">
       <br>
       <v-row>
@@ -43,9 +43,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
+h1 {
+  color: $brand;
+}
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: 20px auto;

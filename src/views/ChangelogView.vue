@@ -32,9 +32,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 .wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: 20px auto;
@@ -42,7 +44,7 @@ export default {
 }
 h1 {
   font-size: 1.7rem;
-  color: #F2C800;
+  color: $brand;
 }
 h2 {
   color: #647179;

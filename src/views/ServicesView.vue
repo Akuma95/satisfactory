@@ -58,23 +58,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 .wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: 20px auto;
   padding: 10px 20px;
 }
 .w1 {
-  background-color: #fae0c2;
+  background-color: $background-box1;
 }
 .w2 {
-  background-color: #ffd8d8;
+  background-color: $background-box2;
 }
 h1 {
   font-size: 1.7rem;
-  color: #F2C800;
+  color: $brand;
 }
 h2 {
   color: #647179;

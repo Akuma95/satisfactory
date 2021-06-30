@@ -1,0 +1,49 @@
+// Globals
+$global-font-family: "Avenir", Helvetica, Arial, sans-serif;
+$border-radius-root: 6px;
+$font-size-root: 14px;
+
+// Colors
+$cyan-blau: #2c3e50;
+$lighter-black: #202125;
+$black: #111416;
+$grey: #647179;
+$white: #ddd;
+$lighter-orange: #fae0c2;
+$yellow: #F2C800;
+$darker-yellow: #ad9210;
+$red: #a90000;
+$lighter-red: #ffd8d8;
+$green: #62c600;
+$darker-green: #388E3C;
+$blue: #1976D2;
+$darker-blue: #1b174f;
+
+$brand: $yellow;
+$brand-dark: $darker-yellow;
+$accent: $black;
+$warn: $red;
+$font-color: $cyan-blau;
+$font-color-light: $white;
+$link-color: $grey;
+$background-app: $lighter-black;
+$background-box: $white;
+$background-box1: $lighter-orange;
+$background-box2: $lighter-red;
+
+$output: lighten($red, 30%);
+$input: $green;
+$block: $yellow;
+$inOut: lighten($blue, 20%);
+$line: $darker-blue;
+
+$btn-new: $blue;
+$btn-join: $darker-green;
+$discord: #7289da;
+$telegram: #0088cc;
+
+$border1: $yellow;
+$border2: $red;
+$border3: $green;
+
+        // Variables must come before the import

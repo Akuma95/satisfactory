@@ -4,26 +4,26 @@
       <v-col cols="12">
         <v-expansion-panels>
           <v-expansion-panel>
-            <v-expansion-panel-header color="#111416">
-              <h3 style="color: #dddddd">Einen Bahnhof o. LKW-Station ergänzen</h3>
+            <v-expansion-panel-header class="background-black">
+              <h3 class="fontLight">Einen Bahnhof o. LKW-Station ergänzen</h3>
             </v-expansion-panel-header>
-            <v-expansion-panel-content color="#111416">
+            <v-expansion-panel-content class="background-black">
               <add-route-view></add-route-view>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-header color="#111416">
-              <h3 style="color: #dddddd">Ein Fahrzeug ergänzen</h3>
+            <v-expansion-panel-header class="background-black">
+              <h3 class="fontLight">Ein Fahrzeug ergänzen</h3>
             </v-expansion-panel-header>
-            <v-expansion-panel-content color="#111416">
+            <v-expansion-panel-content class="background-black">
               <add-plan-view></add-plan-view>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-header color="#111416">
-              <h3 style="color: #dddddd">Füllraten</h3>
+            <v-expansion-panel-header class="background-black">
+              <h3 class="fontLight">Füllraten</h3>
             </v-expansion-panel-header>
-            <v-expansion-panel-content color="#111416">
+            <v-expansion-panel-content class="background-black">
               <show-fill-duration-view></show-fill-duration-view>
             </v-expansion-panel-content>
           </v-expansion-panel>

@@ -177,16 +177,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: auto;
   padding: 10px 20px;
 }
 .wrapper {
-  background-color: #b8b8b8;
+  background-color: $background-box;
   border-radius: 20px;
   margin: 10px 0;
   padding: 10px 20px;
@@ -221,7 +223,7 @@ ul li:before {
   position: absolute;
   width: 4px;
   height: 100%;
-  background-color: #1b174f;
+  background-color: $line;
 }
 ul li:last-child:before{
   display: none;
@@ -235,32 +237,32 @@ ul li:after {
   width: 15px;
   height: 15px;
   margin-top: -10px;
-  background-color: #1b174f;
+  background-color: $line;
   -webkit-border-radius: 50%!important;
   -moz-border-radius: 50%!important;
   -ms-border-radius: 50%!important;
   border-radius: 50%!important;
-  border: 3px solid #1b174f;
+  border: 3px solid $line;
 }
 ul li.freightInOut:after{
-  background-color: #00a2a9;
+  background-color: $inOut;
 }
 ul li.freightBlock:after{
-  background-color: #dec800;
+  background-color: $block;
 }
 .freightBlock{
-  color: #ff0000;
+  color: $output;
 }
 .in{
-  color: #2da900;
+  color: $input;
 }
 .out{
-  color: #a90000;
+  color: $output;
 }
 ul li.freightIn:after{
-  background-color: #2da900;
+  background-color: $input;
 }
 ul li.freightOut:after{
-  background-color: #a90000;
+  background-color: $output;
 }
 </style>

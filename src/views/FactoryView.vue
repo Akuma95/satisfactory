@@ -4,18 +4,18 @@
       <v-col cols="12">
         <v-expansion-panels>
           <v-expansion-panel>
-            <v-expansion-panel-header color="#111416">
-              <p style="color: #dddddd">Fabik hinzufügen</p>
+            <v-expansion-panel-header class="background-black">
+              <p class="fontLight">Fabik hinzufügen</p>
             </v-expansion-panel-header>
-            <v-expansion-panel-content color="#111416">
+            <v-expansion-panel-content class="background-black">
               <add-factory-view></add-factory-view>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-header color="#111416">
-              <p style="color: #dddddd">Fabik entfernen</p>
+            <v-expansion-panel-header class="background-black">
+              <p class="fontLight">Fabik entfernen</p>
             </v-expansion-panel-header>
-            <v-expansion-panel-content color="#111416">
+            <v-expansion-panel-content class="background-black">
               <delete-factory-view></delete-factory-view>
             </v-expansion-panel-content>
           </v-expansion-panel>

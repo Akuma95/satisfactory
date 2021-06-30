@@ -5,7 +5,7 @@
           <!--<v-btn color="green">Speichern</v-btn>-->
         </v-col>
         <v-col cols="2">
-          <v-btn color="#ad1010" style="color: #ddd;" @click="sheet = !sheet">Löschen</v-btn>
+          <v-btn class="btn-delete" @click="sheet = !sheet">Löschen</v-btn>
           <v-bottom-sheet v-model="sheet">
             <v-sheet
                 class="text-center"
@@ -62,7 +62,7 @@
             <v-col cols="12" md="2">{{node.countNodes}}</v-col>
             <v-col cols="3"></v-col>
             <v-col cols="12">{{node.station}}</v-col><br>
-            <v-col cols="12"><v-divider style="background-color: #F2C800"></v-divider></v-col>
+            <v-col cols="12"><v-divider class="divider-one"></v-divider></v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="4">
@@ -73,7 +73,7 @@
             <v-col cols="12" md="2">{{input.countRessource}}</v-col>
             <v-col cols="3"></v-col>
             <v-col cols="12">{{input.station}}</v-col>
-            <v-col cols="12"><v-divider style="background-color: #FA0E49"></v-divider></v-col>
+            <v-col cols="12"><v-divider class="divider-two"></v-divider></v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="4">
@@ -84,7 +84,7 @@
             <v-col cols="12" md="2">{{output.countRessource}}</v-col>
             <v-col cols="3"></v-col>
             <v-col cols="12">{{output.station}}</v-col>
-            <v-col cols="12"><v-divider style="background-color: #62c600"></v-divider></v-col>
+            <v-col cols="12"><v-divider class="divider-three"></v-divider></v-col>
           </v-row>
         </v-col>
       </v-row>
@@ -115,10 +115,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
+  background-color: $background-box;
   border-radius: 20px;
-  background-color: #dddddd;
   width: 92%;
   margin: auto;
   padding: 10px 20px;

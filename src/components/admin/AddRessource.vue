@@ -29,21 +29,21 @@
         <v-checkbox
             v-model="ressource.ore"
             label="Erz"
-            color="#ad9210"
+            class="checkboxBackground"
         ></v-checkbox>
       </v-col>
       <v-col cols="4">
         <v-checkbox
             v-model="ressource.alternative"
             label="Alternative"
-            color="#ad9210"
+            class="checkboxBackground"
         ></v-checkbox>
       </v-col>
       <v-col cols="4">
         <v-checkbox
             v-model="ressource.liquid"
             label="Flüssigkeit"
-            color="#ad9210"
+            class="checkboxBackground"
         ></v-checkbox>
       </v-col>
     </v-row>
@@ -114,7 +114,7 @@
       </v-row>
     </span>
 
-    <v-btn @click="save" color="#F2C800">Speichern</v-btn>
+    <v-btn @click="save" class="btn-brand">Speichern</v-btn>
 
   </div>
 </template>
@@ -205,9 +205,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: auto;

@@ -24,8 +24,7 @@
       </v-col>
       <v-col cols="3">
         <v-btn
-            style="height: 56px; color: #ddd; width: 100%"
-            color="#ad1010"
+            class="btn-delete"
             :disabled="!disableBtn"
             @click="deleteFactory"
         >Löschen</v-btn>
@@ -112,9 +111,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: auto;

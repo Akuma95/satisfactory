@@ -38,20 +38,18 @@
     <v-row>
       <v-col cols="12" md="4">
         <span><h2>Node für die Fabrik</h2> <v-btn
-            class="mx-2"
+            class="mx-2 background-black"
             icon
             small
-            color="#333"
             @click="addNode"
         >
             <v-icon dark>
               mdi-plus
             </v-icon>
           </v-btn><v-btn
-            class="mx-2"
+            class="mx-2 btn-tracker"
             icon
             small
-            color="#333"
             @click="removeNode"
         >
             <v-icon dark>
@@ -59,7 +57,7 @@
             </v-icon>
           </v-btn></span>
         <br><br>
-        <v-divider style="background-color: #F2C800"></v-divider>
+        <v-divider class="divider-one"></v-divider>
         <span v-for="node in countNode" :key="node">
           <div class="input">
             <v-row>
@@ -112,25 +110,23 @@
               </v-col>
             </v-row>
           </div>
-        <v-divider style="background-color: #F2C800"></v-divider>
+        <v-divider class="divider-one"></v-divider>
         </span>
       </v-col>
       <v-col cols="12" md="4">
         <span><h2>Input der Fabrik</h2> <v-btn
-            class="mx-2"
+            class="mx-2 btn-tracker"
             icon
             small
-            color="#333"
             @click="addInput"
           >
             <v-icon dark>
               mdi-plus
             </v-icon>
           </v-btn><v-btn
-            class="mx-2"
+            class="mx-2 btn-tracker"
             icon
             small
-            color="#333"
             @click="removeInput"
         >
             <v-icon dark>
@@ -138,7 +134,7 @@
             </v-icon>
           </v-btn></span>
         <br><br>
-        <v-divider style="background-color: #FA0E49"></v-divider>
+        <v-divider class="divider-two"></v-divider>
         <span v-for="input in countInput" :key="input">
           <div class="input">
             <v-row>
@@ -178,25 +174,23 @@
               </v-col>
             </v-row>
           </div>
-        <v-divider style="background-color: #FA0E49"></v-divider>
+        <v-divider  class="divider-two"></v-divider>
         </span>
       </v-col>
       <v-col cols="12" md="4">
         <span><h2>Output der Fabrik</h2> <v-btn
-            class="mx-2"
+            class="mx-2 btn-tracker"
             icon
             small
-            color="#333"
             @click="addOutput"
         >
             <v-icon dark>
               mdi-plus
             </v-icon>
           </v-btn><v-btn
-            class="mx-2"
+            class="mx-2 btn-tracker"
             icon
             small
-            color="#333"
             @click="removeOutput"
         >
             <v-icon dark>
@@ -204,7 +198,7 @@
             </v-icon>
           </v-btn></span>
         <br><br>
-        <v-divider style="background-color: #62c600"></v-divider>
+        <v-divider  class="divider-three"></v-divider>
         <span v-for="output in countOutput" :key="output">
           <div class="input">
             <v-row>
@@ -244,7 +238,7 @@
               </v-col>
             </v-row>
           </div>
-          <v-divider style="background-color: #62c600"></v-divider>
+          <v-divider class="divider-three"></v-divider>
         </span>
       </v-col>
     </v-row>
@@ -253,7 +247,7 @@
       <v-col cols="10">
         <v-btn
             @click="save"
-            style="background-color: #F2C800"
+            class="btn-brand"
             :disabled="factory.id===''"
         >Speichern</v-btn>
       </v-col>
@@ -494,9 +488,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "src/assets/style/variables.scss";
+
 #wrapper {
-  background-color: #dddddd;
+  background-color: $background-box;
   border-radius: 20px;
   width: 90%;
   margin: auto;
