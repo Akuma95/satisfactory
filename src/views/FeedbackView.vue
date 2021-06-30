@@ -153,6 +153,10 @@ export default {
         db.collection('feedback').doc(humanDateShort+'||'+this.subject).set(body).then(() => {
           this.success = true;
           this.successBody = body;
+          this.subject = "";
+          this.message = "";
+          this.kind = "";
+
         })
       } else {
         this.error = true;

@@ -38,7 +38,7 @@
     <v-row>
       <v-col cols="12" md="4">
         <span><h2>Node für die Fabrik</h2> <v-btn
-            class="mx-2 background-black"
+            class="mx-2 btn-tracker"
             icon
             small
             @click="addNode"
