@@ -402,6 +402,7 @@ export default {
             pathRessource.doc(e.resource.value).collection('produce').doc(fabric.name).set(output);
           }
         })
+        this.$store.dispatch("setAllFactory");
         // TODO: Fehlermeldung "Cannot read property of 'name'
         this.factory = {
           id: '',

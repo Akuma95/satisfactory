@@ -109,7 +109,10 @@ export default {
     deleteFactory() {
       //Den Pfad erstellen zur DB.
       let prepared = getPrepared()
-      prepared.collection('factory').doc(this.factory.name).delete();
+      prepared.collection('factory').doc(this.factory.name).delete().then(() => {
+        this.$store.dispatch("setAllFactory");
+        this.sheet = false;
+      });
     }
   }
 };
